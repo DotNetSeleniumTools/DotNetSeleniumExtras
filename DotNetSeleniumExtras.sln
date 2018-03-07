@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.PageObjects.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.Common.Tests", "test\Common\SeleniumExtras.Common.Tests.csproj", "{2FA4FD8A-244E-43AD-9679-2FF5F85CDF4D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.WaitHelpers", "src\WaitHelpers\SeleniumExtras.WaitHelpers.csproj", "{557CD7CE-C90B-43A7-81E4-BCD770E190E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2FA4FD8A-244E-43AD-9679-2FF5F85CDF4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FA4FD8A-244E-43AD-9679-2FF5F85CDF4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FA4FD8A-244E-43AD-9679-2FF5F85CDF4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{557CD7CE-C90B-43A7-81E4-BCD770E190E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{557CD7CE-C90B-43A7-81E4-BCD770E190E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{557CD7CE-C90B-43A7-81E4-BCD770E190E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{557CD7CE-C90B-43A7-81E4-BCD770E190E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
