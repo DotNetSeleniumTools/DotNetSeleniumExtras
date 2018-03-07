@@ -5,7 +5,7 @@ This repository is a migration of code from the [Selenium project's](https://git
 .NET bindings. It consists of the `PageFactory` implementation and the `ExpectedConditions` classes from the
 Selenium.Support library.
 
-## THIS REPOSITORY DOES NOT ACCEPT ISSUES OR PULL REQUESTS
+## THIS REPOSITORY WILL NOT ACCEPT ISSUES OR PULL REQUESTS UNTIL A NEW OWNER IS FOUND
 
 The code has been extracted here to preserve it for users, to provide a place for users to continue to use
 the existing implementations when the impelementations are removed from the Selenium project. It is hoped
