@@ -4,6 +4,13 @@
     <TargetFrameworks>net45;net40;net35;netstandard2.0</TargetFrameworks>
     <AssemblyName>SeleniumExtras.PageObjects</AssemblyName>
     <RootNamespace>SeleniumExtras</RootNamespace>
+    <AssemblyVersion>3.11.0.0</AssemblyVersion>
+    <FileVersion>3.11.0.0</FileVersion>
+    <Version>3.11.0</Version>
+    <PackageId>DotNetSeleniumExtras.PageObjects</PackageId>
+    <Authors>DotNetSeleniumExtras Contributors</Authors>
+    <Description>This package provides an implementation of the PageFactory for .NET, replacing the implementation originally provided by the Selenium project.</Description>
+    <Copyright>Copyright 2018, Software Freedom Conservancy</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
