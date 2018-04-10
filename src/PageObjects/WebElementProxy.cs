@@ -16,23 +16,27 @@
 // limitations under the License.
 // </copyright>
 
-#if !NETSTANDARD2_0
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
-using OpenQA.Selenium.Internal;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Internal;
+
+#if !NETSTANDARD2_0
+using System;
+using System.Runtime.Remoting.Messaging;
+#else
+#endif
 
 namespace SeleniumExtras.PageObjects
 {
     /// <summary>
     /// Intercepts the request to a single <see cref="IWebElement"/>
     /// </summary>
-    internal sealed class WebElementProxy : WebDriverObjectProxy, IWrapsElement
+    public class WebElementProxy : WebDriverObjectProxy, IWrapsElement
     {
         private IWebElement cachedElement;
 
+#if !NETSTANDARD2_0
         /// <summary>
         /// Initializes a new instance of the <see cref="WebElementProxy"/> class.
         /// </summary>
@@ -45,6 +49,7 @@ namespace SeleniumExtras.PageObjects
             : base(classToProxy, locator, bys, cache)
         {
         }
+#endif
 
         /// <summary>
         /// Gets the <see cref="IWebElement"/> wrapped by this object.
@@ -79,11 +84,18 @@ namespace SeleniumExtras.PageObjects
         /// <param name="bys">The list of methods by which to search for the elements.</param>
         /// <param name="cacheLookups"><see langword="true"/> to cache the lookup to the element; otherwise, <see langword="false"/>.</param>
         /// <returns>An object used to proxy calls to properties and methods of the list of <see cref="IWebElement"/> objects.</returns>
-        public static object CreateProxy(Type classToProxy, IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
+        public static object CreateProxy(IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
         {
-            return new WebElementProxy(classToProxy, locator, bys, cacheLookups).GetTransparentProxy();
+#if !NETSTANDARD2_0
+            return new WebElementProxy(typeof(IWebElement), locator, bys, cacheLookups).GetTransparentProxy();
+#else
+            var proxy = Create<IWebElement, WebElementProxy>();
+            ((WebElementProxy)(object)proxy).SetSearchProperites(locator, bys, cacheLookups);
+            return proxy;
+#endif
         }
 
+#if !NETSTANDARD2_0
         /// <summary>
         /// Invokes the method that is specified in the provided <see cref="IMessage"/> on the
         /// object that is represented by the current instance.
@@ -104,6 +116,17 @@ namespace SeleniumExtras.PageObjects
 
             return WebDriverObjectProxy.InvokeMethod(methodCallMessage, element);
         }
+#else
+        protected override object Invoke(MethodInfo targetMethod, object[] args)
+        {
+            var decalringType = targetMethod.DeclaringType;
+
+            if (decalringType == typeof(IWebElement))
+            {
+                return targetMethod.Invoke(Element, args);
+            }
+            return targetMethod.Invoke(this, args);
+        }
+#endif
     }
 }
-#endif

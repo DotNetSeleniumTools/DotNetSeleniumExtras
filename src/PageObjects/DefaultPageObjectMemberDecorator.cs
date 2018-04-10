@@ -16,14 +16,12 @@
 // limitations under the License.
 // </copyright>
 
-#if !NETSTANDARD2_0
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
-using System.Reflection.Emit;
-using OpenQA.Selenium.Internal;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Internal;
 
 namespace SeleniumExtras.PageObjects
 {
@@ -34,7 +32,6 @@ namespace SeleniumExtras.PageObjects
     public class DefaultPageObjectMemberDecorator : IPageObjectMemberDecorator
     {
         private static List<Type> interfacesToBeProxied;
-        private static Type interfaceProxyType;
 
         private static List<Type> InterfacesToBeProxied
         {
@@ -49,19 +46,6 @@ namespace SeleniumExtras.PageObjects
                 }
 
                 return interfacesToBeProxied;
-            }
-        }
-
-        private static Type InterfaceProxyType
-        {
-            get
-            {
-                if (interfaceProxyType == null)
-                {
-                    interfaceProxyType = CreateTypeForASingleElement();
-                }
-
-                return interfaceProxyType;
             }
         }
 
@@ -193,14 +177,14 @@ namespace SeleniumExtras.PageObjects
                     Type listType = typeof(IList<>).MakeGenericType(type);
                     if (listType.Equals(memberType))
                     {
-                        proxyObject = WebElementListProxy.CreateProxy(memberType, locator, bys, cache);
+                        proxyObject = WebElementListProxy.CreateProxy(locator, bys, cache);
                         break;
                     }
                 }
             }
             else if (memberType == typeof(IWebElement))
             {
-                proxyObject = WebElementProxy.CreateProxy(InterfaceProxyType, locator, bys, cache);
+                proxyObject = WebElementProxy.CreateProxy(locator, bys, cache);
             }
             else
             {
@@ -209,22 +193,5 @@ namespace SeleniumExtras.PageObjects
 
             return proxyObject;
         }
-
-        private static Type CreateTypeForASingleElement()
-        {
-            AssemblyName tempAssemblyName = new AssemblyName(Guid.NewGuid().ToString());
-
-            AssemblyBuilder dynamicAssembly = AppDomain.CurrentDomain.DefineDynamicAssembly(tempAssemblyName, AssemblyBuilderAccess.Run);
-            ModuleBuilder moduleBuilder = dynamicAssembly.DefineDynamicModule(tempAssemblyName.Name);
-            TypeBuilder typeBuilder = moduleBuilder.DefineType(typeof(IWebElement).FullName, TypeAttributes.Public | TypeAttributes.Interface | TypeAttributes.Abstract);
-
-            foreach (Type type in InterfacesToBeProxied)
-            {
-                typeBuilder.AddInterfaceImplementation(type);
-            }
-
-            return typeBuilder.CreateType();
-        }
     }
 }
-#endif

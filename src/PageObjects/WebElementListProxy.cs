@@ -16,22 +16,26 @@
 // limitations under the License.
 // </copyright>
 
+using System.Collections.Generic;
+using OpenQA.Selenium;
+
 #if !NETSTANDARD2_0
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
-using OpenQA.Selenium;
+#else
+using System.Reflection;
+#endif
 
 namespace SeleniumExtras.PageObjects
 {
     /// <summary>
     /// Represents a proxy class for a list of elements to be used with the PageFactory.
     /// </summary>
-    internal class WebElementListProxy : WebDriverObjectProxy
+    public class WebElementListProxy : WebDriverObjectProxy
     {
         private List<IWebElement> collection = null;
 
+#if !NETSTANDARD2_0
         /// <summary>
         /// Initializes a new instance of the <see cref="WebElementListProxy"/> class.
         /// </summary>
@@ -44,6 +48,7 @@ namespace SeleniumExtras.PageObjects
             : base(typeToBeProxied, locator, bys, cache)
         {
         }
+#endif
 
         /// <summary>
         /// Gets the list of IWebElement objects this proxy represents, returning a cached one if requested.
@@ -74,11 +79,18 @@ namespace SeleniumExtras.PageObjects
         /// element; otherwise, <see langword="false"/>.</param>
         /// <returns>An object used to proxy calls to properties and methods of the
         /// list of <see cref="IWebElement"/> objects.</returns>
-        public static object CreateProxy(Type classToProxy, IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
+        public static object CreateProxy(IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
         {
-            return new WebElementListProxy(classToProxy, locator, bys, cacheLookups).GetTransparentProxy();
+#if !NETSTANDARD2_0
+            return new WebElementListProxy(typeof(IList<IWebElement>), locator, bys, cacheLookups).GetTransparentProxy();
+#else
+            var proxy = Create<IList<IWebElement>, WebElementListProxy>();
+            ((WebElementListProxy)(object)proxy).SetSearchProperites(locator, bys, cacheLookups);
+            return proxy;
+#endif
         }
 
+#if !NETSTANDARD2_0
         /// <summary>
         /// Invokes the method that is specified in the provided <see cref="IMessage"/> on the
         /// object that is represented by the current instance.
@@ -92,6 +104,11 @@ namespace SeleniumExtras.PageObjects
             var elements = this.ElementList;
             return WebDriverObjectProxy.InvokeMethod(msg as IMethodCallMessage, elements);
         }
+#else
+        protected override object Invoke(MethodInfo targetMethod, object[] args)
+        {
+            return targetMethod.Invoke(ElementList, args);
+        }
+#endif
     }
 }
-#endif

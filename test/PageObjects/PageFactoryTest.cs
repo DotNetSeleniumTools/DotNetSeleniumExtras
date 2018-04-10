@@ -10,7 +10,6 @@ namespace SeleniumExtras.PageObjects
     [TestFixture]
     public class PageFactoryTest
     {
-#if !NETCOREAPP2_0
         private Mock<ISearchContext> mockDriver;
         private Mock<IWebElement> mockElement;
         private Mock<IWebDriver> mockExplicitDriver;
@@ -22,7 +21,7 @@ namespace SeleniumExtras.PageObjects
             mockElement = new Mock<IWebElement>();
             mockExplicitDriver = new Mock<IWebDriver>();
         }
-        
+
         [TearDown]
         public void TearDown()
         {
@@ -34,7 +33,7 @@ namespace SeleniumExtras.PageObjects
         public void ElementShouldBeNullUntilInitElementsCalled()
         {
             var page = new Page();
-            
+
             Assert.Null(page.formElement);
 
             PageFactory.InitElements(mockDriver.Object, page);
@@ -49,19 +48,19 @@ namespace SeleniumExtras.PageObjects
             Assert.IsInstanceOf<GenericFactoryPage>(page);
             Assert.NotNull(page.formElement);
         }
-        
+
         [Test]
         public void FindsElement()
         {
             var page = new Page();
             AssertFindsElementByExactlyOneLookup(page, () => page.formElement);
         }
-        
+
         [Test]
         public void FindsElementEachAccess()
         {
             var page = new Page();
-            
+
             AssertFindsElementByExactlyOneLookup(page, () => page.formElement);
             mockDriver.Verify();
             mockElement.Verify();
@@ -207,7 +206,7 @@ namespace SeleniumExtras.PageObjects
         public void UsingCustomByNotFound()
         {
             mockDriver.Setup(_ => _.FindElement(It.Is<CustomBy>(x => x.Equals(new CustomBy("customCriteriaNotFound"))))).Throws<NoSuchElementException>();
-            
+
             var page = new CustomByNotFoundPage();
             PageFactory.InitElements(mockDriver.Object, page);
             Assert.Throws<NoSuchElementException>(page.customFoundElement.Clear);
@@ -299,7 +298,7 @@ namespace SeleniumExtras.PageObjects
 
             AssertFoundElement(getElement());
         }
-        
+
         /// <summary>
         /// Asserts that the element has been found and can be interacted with
         /// </summary>
@@ -315,17 +314,16 @@ namespace SeleniumExtras.PageObjects
         {
             Assert.AreEqual(tagName, element.TagName.ToLower());
         }
-        
+
         #endregion
-        
+
         #region Page classes for tests
-        #pragma warning disable 649 //We set fields through reflection, so expect an always-null warning
 
         internal class WebDriverConstructorPage
         {
             [FindsBy(How = How.Name, Using = "someForm")]
             public IWebElement formElement;
-            
+
             public WebDriverConstructorPage(IWebDriver driver)
             {
             }
@@ -335,7 +333,7 @@ namespace SeleniumExtras.PageObjects
         {
             [FindsBy(How = How.Name, Using = "someForm")]
             public IWebElement formElement;
-            
+
             public ParameterlessConstructorPage()
             {
             }
@@ -451,7 +449,7 @@ namespace SeleniumExtras.PageObjects
                         throw new NoSuchElementException();
                     }
 
-                    Mock<IWebElement> mockElement =  new Mock<IWebElement>();
+                    Mock<IWebElement> mockElement = new Mock<IWebElement>();
                     return mockElement.Object;
                 };
             }
@@ -471,7 +469,7 @@ namespace SeleniumExtras.PageObjects
                         throw new NoSuchElementException();
                     }
 
-                    Mock<IWebElement> mockElement =  new Mock<IWebElement>();
+                    Mock<IWebElement> mockElement = new Mock<IWebElement>();
                     return mockElement.Object;
                 };
             }
@@ -537,8 +535,6 @@ namespace SeleniumExtras.PageObjects
             public ReadOnlyCollection<IWebElement> myElement;
         }
 
-        #pragma warning restore 649
         #endregion
-#endif
     }
 }

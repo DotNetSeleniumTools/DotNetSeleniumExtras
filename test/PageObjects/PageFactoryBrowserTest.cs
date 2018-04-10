@@ -10,14 +10,13 @@ namespace SeleniumExtras.PageObjects
     [TestFixture]
     public class PageFactoryBrowserTest : DriverTestFixture
     {
-#if !NETCOREAPP2_0
         //TODO: Move these to a standalone class when more tests rely on the server being up
         [OneTimeSetUp]
         public void RunBeforeAnyTest()
         {
             EnvironmentManager.Instance.WebServer.Start();
         }
-        
+
         [OneTimeTearDown]
         public void RunAfterAnyTests()
         {
@@ -72,7 +71,7 @@ namespace SeleniumExtras.PageObjects
             driver.Url = javascriptPage;
             var page = new PageFactoryBrowserTest.HoverPage();
             PageFactory.InitElements(driver, page);
-            
+
             Actions actions = new Actions(driver);
             actions.MoveToElement(page.MenuLink).Perform();
 
@@ -126,7 +125,6 @@ namespace SeleniumExtras.PageObjects
         }
 
         #region Page classes for tests
-        #pragma warning disable 649 //We set fields through reflection, so expect an always-null warning
 
         private class Page
         {
@@ -146,13 +144,13 @@ namespace SeleniumExtras.PageObjects
 
         private class HoverPage
         {
-            [FindsBy(How=How.Id, Using="menu1")]
+            [FindsBy(How = How.Id, Using = "menu1")]
             public IWebElement MenuLink;
         }
 
         private class LinksPage
         {
-            [FindsBy(How=How.TagName, Using="a")]
+            [FindsBy(How = How.TagName, Using = "a")]
             public IList<IWebElement> AllLinks;
         }
 
@@ -171,8 +169,6 @@ namespace SeleniumExtras.PageObjects
             public IWebElement Frame;
         }
 
-        #pragma warning restore 649
         #endregion
-#endif
     }
 }
