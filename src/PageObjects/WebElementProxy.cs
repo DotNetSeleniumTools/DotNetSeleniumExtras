@@ -54,7 +54,7 @@ namespace SeleniumExtras.PageObjects
         /// <summary>
         /// Gets the <see cref="IWebElement"/> wrapped by this object.
         /// </summary>
-        public IWebElement WrappedElement
+        public virtual IWebElement WrappedElement
         {
             get { return this.Element; }
         }
@@ -87,9 +87,9 @@ namespace SeleniumExtras.PageObjects
         public static object CreateProxy(IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
         {
 #if !NETSTANDARD2_0
-            return new WebElementProxy(typeof(IWebElement), locator, bys, cacheLookups).GetTransparentProxy();
+            return new WebElementProxy(typeof(IProxiedWebElement), locator, bys, cacheLookups).GetTransparentProxy();
 #else
-            var proxy = Create<IWebElement, WebElementProxy>();
+            var proxy = Create<IProxiedWebElement, WebElementProxy>();
             ((WebElementProxy)(object)proxy).SetSearchProperites(locator, bys, cacheLookups);
             return proxy;
 #endif
@@ -121,11 +121,11 @@ namespace SeleniumExtras.PageObjects
         {
             var decalringType = targetMethod.DeclaringType;
 
-            if (decalringType == typeof(IWebElement))
+            if (decalringType == typeof(IWrapsElement))
             {
-                return targetMethod.Invoke(Element, args);
+                return Element;
             }
-            return targetMethod.Invoke(this, args);
+            return targetMethod.Invoke(Element, args);
         }
 #endif
     }

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Internal;
 
 namespace SeleniumExtras.PageObjects
 {
@@ -270,6 +272,36 @@ namespace SeleniumExtras.PageObjects
         public void CanNotUseGenericInitElementWithParameterlessConstructor()
         {
             Assert.Throws<ArgumentException>(() => { ParameterlessConstructorPage page = PageFactory.InitElements<ParameterlessConstructorPage>(mockExplicitDriver.Object); }, "constructor for the specified class containing a single argument of type IWebDriver");
+        }
+
+        [Test]
+        public void InitElementIsIWrapsElement()
+        {
+            mockDriver.Setup(_ => _.FindElement(It.Is<By>(x => x.Equals(By.Name("someForm"))))).Returns(mockElement.Object);
+
+            var page = new Page();
+            PageFactory.InitElements(mockDriver.Object, page);
+            var initElement = page.formElement;
+
+            Assert.That(initElement, Is.InstanceOf<IWrapsElement>());
+            Assert.That((initElement as IWrapsElement).WrappedElement, Is.Not.Null);
+        }
+
+        [Test]
+        public void InitElementIsILocatable()
+        {
+            var expectedLocation = new Point(1, 1);
+            mockElement
+                .As<ILocatable>()
+                .Setup(l => l.LocationOnScreenOnceScrolledIntoView).Returns(expectedLocation);
+            mockDriver.Setup(_ => _.FindElement(It.Is<By>(x => x.Equals(By.Name("someForm"))))).Returns(mockElement.Object);
+
+            var page = new Page();
+            PageFactory.InitElements(mockDriver.Object, page);
+            var initElement = page.formElement;
+
+            Assert.That(initElement, Is.InstanceOf<ILocatable>());
+            Assert.That((initElement as ILocatable).LocationOnScreenOnceScrolledIntoView, Is.EqualTo(expectedLocation));
         }
 
         #region Test helper methods
