@@ -16,11 +16,8 @@
 // limitations under the License.
 // </copyright>
 
-#if !NETSTANDARD2_0
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using OpenQA.Selenium;
 
 namespace SeleniumExtras.PageObjects
@@ -28,20 +25,19 @@ namespace SeleniumExtras.PageObjects
     /// <summary>
     /// Represents a proxy class for a list of elements to be used with the PageFactory.
     /// </summary>
-    internal class WebElementListProxy : WebDriverObjectProxy
+    internal class WebElementListProxy : WebDriverObjectProxy,IList<IWebElement>
     {
         private List<IWebElement> collection = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebElementListProxy"/> class.
         /// </summary>
-        /// <param name="typeToBeProxied">The <see cref="Type"/> of object for which to create a proxy.</param>
         /// <param name="locator">The <see cref="IElementLocator"/> implementation that
         /// determines how elements are located.</param>
         /// <param name="bys">The list of methods by which to search for the elements.</param>
         /// <param name="cache"><see langword="true"/> to cache the lookup to the element; otherwise, <see langword="false"/>.</param>
-        private WebElementListProxy(Type typeToBeProxied, IElementLocator locator, IEnumerable<By> bys, bool cache)
-            : base(typeToBeProxied, locator, bys, cache)
+        private WebElementListProxy(IElementLocator locator, IEnumerable<By> bys, bool cache)
+            : base(locator, bys, cache)
         {
         }
 
@@ -66,7 +62,6 @@ namespace SeleniumExtras.PageObjects
         /// Creates an object used to proxy calls to properties and methods of the
         /// list of <see cref="IWebElement"/> objects.
         /// </summary>
-        /// <param name="classToProxy">The <see cref="Type"/> of object for which to create a proxy.</param>
         /// <param name="locator">The <see cref="IElementLocator"/> implementation that
         /// determines how elements are located.</param>
         /// <param name="bys">The list of methods by which to search for the elements.</param>
@@ -74,24 +69,75 @@ namespace SeleniumExtras.PageObjects
         /// element; otherwise, <see langword="false"/>.</param>
         /// <returns>An object used to proxy calls to properties and methods of the
         /// list of <see cref="IWebElement"/> objects.</returns>
-        public static object CreateProxy(Type classToProxy, IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
+        public static object CreateProxy(IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
         {
-            return new WebElementListProxy(classToProxy, locator, bys, cacheLookups).GetTransparentProxy();
+            return new WebElementListProxy(locator, bys, cacheLookups);
         }
 
-        /// <summary>
-        /// Invokes the method that is specified in the provided <see cref="IMessage"/> on the
-        /// object that is represented by the current instance.
-        /// </summary>
-        /// <param name="msg">An <see cref="IMessage"/> that contains an <see cref="IDictionary"/>  of
-        /// information about the method call. </param>
-        /// <returns>The message returned by the invoked method, containing the return value and any
-        /// out or ref parameters.</returns>
-        public override IMessage Invoke(IMessage msg)
+        public IEnumerator<IWebElement> GetEnumerator()
         {
-            var elements = this.ElementList;
-            return WebDriverObjectProxy.InvokeMethod(msg as IMethodCallMessage, elements);
+            return ElementList.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable) ElementList).GetEnumerator();
+        }
+
+        public void Add(IWebElement item)
+        {
+            ElementList.Add(item);
+        }
+
+        public void Clear()
+        {
+            ElementList.Clear();
+        }
+
+        public bool Contains(IWebElement item)
+        {
+            return ElementList.Contains(item);
+        }
+
+        public void CopyTo(IWebElement[] array, int arrayIndex)
+        {
+            ElementList.CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(IWebElement item)
+        {
+            return ElementList.Remove(item);
+        }
+
+        public int Count
+        {
+            get { return ElementList.Count; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return ((ICollection<IWebElement>) ElementList).IsReadOnly; }
+        }
+
+        public int IndexOf(IWebElement item)
+        {
+            return ElementList.IndexOf(item);
+        }
+
+        public void Insert(int index, IWebElement item)
+        {
+            ElementList.Insert(index, item);
+        }
+
+        public void RemoveAt(int index)
+        {
+            ElementList.RemoveAt(index);
+        }
+
+        public IWebElement this[int index]
+        {
+            get { return ElementList[index]; }
+            set { ElementList[index] = value; }
         }
     }
 }
-#endif

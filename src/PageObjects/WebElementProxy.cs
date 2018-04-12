@@ -16,11 +16,10 @@
 // limitations under the License.
 // </copyright>
 
-#if !NETSTANDARD2_0
-using System;
+
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.Remoting.Messaging;
+using System.Collections.ObjectModel;
+using System.Drawing;
 using OpenQA.Selenium.Internal;
 using OpenQA.Selenium;
 
@@ -29,20 +28,20 @@ namespace SeleniumExtras.PageObjects
     /// <summary>
     /// Intercepts the request to a single <see cref="IWebElement"/>
     /// </summary>
-    internal sealed class WebElementProxy : WebDriverObjectProxy, IWrapsElement
+    internal sealed class WebElementProxy : WebDriverObjectProxy, IWrapsElement, IWebElement
     {
         private IWebElement cachedElement;
+        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WebElementProxy"/> class.
         /// </summary>
-        /// <param name="classToProxy">The <see cref="Type"/> of object for which to create a proxy.</param>
         /// <param name="locator">The <see cref="IElementLocator"/> implementation that determines
         /// how elements are located.</param>
         /// <param name="bys">The list of methods by which to search for the elements.</param>
         /// <param name="cache"><see langword="true"/> to cache the lookup to the element; otherwise, <see langword="false"/>.</param>
-        private WebElementProxy(Type classToProxy, IElementLocator locator, IEnumerable<By> bys, bool cache)
-            : base(classToProxy, locator, bys, cache)
+        private WebElementProxy(IElementLocator locator, IEnumerable<By> bys, bool cache)
+            : base(locator, bys, cache)
         {
         }
 
@@ -73,37 +72,94 @@ namespace SeleniumExtras.PageObjects
         /// <summary>
         /// Creates an object used to proxy calls to properties and methods of an <see cref="IWebElement"/> object.
         /// </summary>
-        /// <param name="classToProxy">The <see cref="Type"/> of object for which to create a proxy.</param>
         /// <param name="locator">The <see cref="IElementLocator"/> implementation that
         /// determines how elements are located.</param>
         /// <param name="bys">The list of methods by which to search for the elements.</param>
         /// <param name="cacheLookups"><see langword="true"/> to cache the lookup to the element; otherwise, <see langword="false"/>.</param>
         /// <returns>An object used to proxy calls to properties and methods of the list of <see cref="IWebElement"/> objects.</returns>
-        public static object CreateProxy(Type classToProxy, IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
+        public static object CreateProxy(IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
         {
-            return new WebElementProxy(classToProxy, locator, bys, cacheLookups).GetTransparentProxy();
+            return new WebElementProxy(locator, bys, cacheLookups);
         }
 
-        /// <summary>
-        /// Invokes the method that is specified in the provided <see cref="IMessage"/> on the
-        /// object that is represented by the current instance.
-        /// </summary>
-        /// <param name="msg">An <see cref="IMessage"/> that contains a dictionary of
-        /// information about the method call. </param>
-        /// <returns>The message returned by the invoked method, containing the return value and any
-        /// out or ref parameters.</returns>
-        public override IMessage Invoke(IMessage msg)
+        public IWebElement FindElement(By @by)
         {
-            var element = this.Element;
-            IMethodCallMessage methodCallMessage = msg as IMethodCallMessage;
+            return Element.FindElement(@by);
+        }
 
-            if (typeof(IWrapsElement).IsAssignableFrom((methodCallMessage.MethodBase as MethodInfo).DeclaringType))
-            {
-                return new ReturnMessage(element, null, 0, methodCallMessage.LogicalCallContext, methodCallMessage);
-            }
+        public ReadOnlyCollection<IWebElement> FindElements(By @by)
+        {
+            return Element.FindElements(@by);
+        }
 
-            return WebDriverObjectProxy.InvokeMethod(methodCallMessage, element);
+        public void Clear()
+        {
+            Element.Clear();
+        }
+
+        public void SendKeys(string text)
+        {
+            Element.SendKeys(text);
+        }
+
+        public void Submit()
+        {
+            Element.Submit();
+        }
+
+        public void Click()
+        {
+            Element.Click();
+        }
+
+        public string GetAttribute(string attributeName)
+        {
+            return Element.GetAttribute(attributeName);
+        }
+
+        public string GetProperty(string propertyName)
+        {
+            return Element.GetProperty(propertyName);
+        }
+
+        public string GetCssValue(string propertyName)
+        {
+            return Element.GetCssValue(propertyName);
+        }
+
+        public string TagName
+        {
+            get { return Element.TagName; }
+        }
+
+        public string Text
+        {
+            get { return Element.Text; }
+        }
+
+        public bool Enabled
+        {
+            get { return Element.Enabled; }
+        }
+
+        public bool Selected
+        {
+            get { return Element.Selected; }
+        }
+
+        public Point Location
+        {
+            get { return Element.Location; }
+        }
+
+        public Size Size
+        {
+            get { return Element.Size; }
+        }
+
+        public bool Displayed
+        {
+            get { return Element.Displayed; }
         }
     }
 }
-#endif

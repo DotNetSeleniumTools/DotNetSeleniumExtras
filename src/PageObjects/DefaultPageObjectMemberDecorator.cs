@@ -16,13 +16,12 @@
 // limitations under the License.
 // </copyright>
 
-#if !NETSTANDARD2_0
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Reflection.Emit;
-using OpenQA.Selenium.Internal;
 using OpenQA.Selenium;
 
 namespace SeleniumExtras.PageObjects
@@ -33,46 +32,14 @@ namespace SeleniumExtras.PageObjects
     /// </summary>
     public class DefaultPageObjectMemberDecorator : IPageObjectMemberDecorator
     {
-        private static List<Type> interfacesToBeProxied;
-        private static Type interfaceProxyType;
-
-        private static List<Type> InterfacesToBeProxied
-        {
-            get
-            {
-                if (interfacesToBeProxied == null)
-                {
-                    interfacesToBeProxied = new List<Type>();
-                    interfacesToBeProxied.Add(typeof(IWebElement));
-                    interfacesToBeProxied.Add(typeof(ILocatable));
-                    interfacesToBeProxied.Add(typeof(IWrapsElement));
-                }
-
-                return interfacesToBeProxied;
-            }
-        }
-
-        private static Type InterfaceProxyType
-        {
-            get
-            {
-                if (interfaceProxyType == null)
-                {
-                    interfaceProxyType = CreateTypeForASingleElement();
-                }
-
-                return interfaceProxyType;
-            }
-        }
-
         /// <summary>
         /// Locates an element or list of elements for a Page Object member, and returns a
-        /// proxy object for the element or list of elements.
+        /// wrapper object for the element or list of elements.
         /// </summary>
         /// <param name="member">The <see cref="MemberInfo"/> containing information about
         /// a class's member.</param>
         /// <param name="locator">The <see cref="IElementLocator"/> used to locate elements.</param>
-        /// <returns>A transparent proxy to the WebDriver element object.</returns>
+        /// <returns>A wrapper to the WebDriver element object.</returns>
         public object Decorate(MemberInfo member, IElementLocator locator)
         {
             FieldInfo field = member as FieldInfo;
@@ -183,48 +150,24 @@ namespace SeleniumExtras.PageObjects
             return bys.AsReadOnly();
         }
 
-        private static object CreateProxyObject(Type memberType, IElementLocator locator, IEnumerable<By> bys, bool cache)
+        private static object CreateProxyObject(Type memberType, IElementLocator locator, IEnumerable<By> bys,bool cache)
         {
             object proxyObject = null;
             if (memberType == typeof(IList<IWebElement>))
             {
-                foreach (var type in InterfacesToBeProxied)
-                {
-                    Type listType = typeof(IList<>).MakeGenericType(type);
-                    if (listType.Equals(memberType))
-                    {
-                        proxyObject = WebElementListProxy.CreateProxy(memberType, locator, bys, cache);
-                        break;
-                    }
-                }
+                proxyObject = WebElementListProxy.CreateProxy(locator, bys, cache);
             }
             else if (memberType == typeof(IWebElement))
             {
-                proxyObject = WebElementProxy.CreateProxy(InterfaceProxyType, locator, bys, cache);
+                proxyObject = WebElementProxy.CreateProxy(locator, bys, cache);
             }
             else
             {
-                throw new ArgumentException("Type of member '" + memberType.Name + "' is not IWebElement or IList<IWebElement>");
+                throw new ArgumentException("Type of member '" + memberType.Name +
+                                            "' is not IWebElement or IList<IWebElement>");
             }
 
             return proxyObject;
         }
-
-        private static Type CreateTypeForASingleElement()
-        {
-            AssemblyName tempAssemblyName = new AssemblyName(Guid.NewGuid().ToString());
-
-            AssemblyBuilder dynamicAssembly = AppDomain.CurrentDomain.DefineDynamicAssembly(tempAssemblyName, AssemblyBuilderAccess.Run);
-            ModuleBuilder moduleBuilder = dynamicAssembly.DefineDynamicModule(tempAssemblyName.Name);
-            TypeBuilder typeBuilder = moduleBuilder.DefineType(typeof(IWebElement).FullName, TypeAttributes.Public | TypeAttributes.Interface | TypeAttributes.Abstract);
-
-            foreach (Type type in InterfacesToBeProxied)
-            {
-                typeBuilder.AddInterfaceImplementation(type);
-            }
-
-            return typeBuilder.CreateType();
-        }
     }
 }
-#endif
