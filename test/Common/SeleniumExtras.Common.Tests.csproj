@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NUnit" Version="3.10.1" />
-    <PackageReference Include="Selenium.WebDriver" Version="3.11.1" />
+    <PackageReference Include="Selenium.WebDriver" Version="3.11.2" />
   </ItemGroup>
 
   <ItemGroup>
