@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Internal;
 
 namespace SeleniumExtras.PageObjects
 {
@@ -31,24 +30,6 @@ namespace SeleniumExtras.PageObjects
     /// </summary>
     public class DefaultPageObjectMemberDecorator : IPageObjectMemberDecorator
     {
-        private static List<Type> interfacesToBeProxied;
-
-        private static List<Type> InterfacesToBeProxied
-        {
-            get
-            {
-                if (interfacesToBeProxied == null)
-                {
-                    interfacesToBeProxied = new List<Type>();
-                    interfacesToBeProxied.Add(typeof(IWebElement));
-                    interfacesToBeProxied.Add(typeof(ILocatable));
-                    interfacesToBeProxied.Add(typeof(IWrapsElement));
-                }
-
-                return interfacesToBeProxied;
-            }
-        }
-
         /// <summary>
         /// Locates an element or list of elements for a Page Object member, and returns a
         /// proxy object for the element or list of elements.
@@ -101,7 +82,7 @@ namespace SeleniumExtras.PageObjects
         {
             if (member == null)
             {
-                throw new ArgumentNullException("member", "memeber cannot be null");
+                throw new ArgumentNullException(nameof(member), "member cannot be null");
             }
 
             var cacheAttributeType = typeof(CacheLookupAttribute);
@@ -119,7 +100,7 @@ namespace SeleniumExtras.PageObjects
         {
             if (member == null)
             {
-                throw new ArgumentNullException("member", "memeber cannot be null");
+                throw new ArgumentNullException(nameof(member), "member cannot be null");
             }
 
             var useSequenceAttributes = Attribute.GetCustomAttributes(member, typeof(FindsBySequenceAttribute), true);
@@ -172,15 +153,7 @@ namespace SeleniumExtras.PageObjects
             object proxyObject = null;
             if (memberType == typeof(IList<IWebElement>))
             {
-                foreach (var type in InterfacesToBeProxied)
-                {
-                    Type listType = typeof(IList<>).MakeGenericType(type);
-                    if (listType.Equals(memberType))
-                    {
-                        proxyObject = WebElementListProxy.CreateProxy(locator, bys, cache);
-                        break;
-                    }
-                }
+                proxyObject = WebElementListProxy.CreateProxy(locator, bys, cache);
             }
             else if (memberType == typeof(IWebElement))
             {
