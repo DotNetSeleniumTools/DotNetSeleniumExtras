@@ -8,7 +8,7 @@
       "HostName": "localhost",
       "Port": "2310",
       "SecurePort": "2410",
-      "Folder": "common"
+      "Folder": "web"
     }
   },
   "DriverConfigs": {

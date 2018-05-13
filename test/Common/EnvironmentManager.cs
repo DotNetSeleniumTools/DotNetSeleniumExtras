@@ -1,6 +1,6 @@
-using System;
-using System.Reflection;
+﻿using System;
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -11,13 +11,8 @@ namespace SeleniumExtras.Environment
     {
         private static EnvironmentManager instance;
         private Type driverType;
-        private Browser browser;
         private IWebDriver driver;
-        private UrlBuilder urlBuilder;
-        private TestWebServer webServer;
         private DriverFactory driverFactory;
-        private RemoteSeleniumServer remoteServer;
-        private string remoteCapabilities;
 
         private EnvironmentManager()
         {
@@ -34,48 +29,21 @@ namespace SeleniumExtras.Environment
 
             Assembly driverAssembly = Assembly.Load(driverConfig.AssemblyName);
             driverType = driverAssembly.GetType(driverConfig.DriverTypeName);
-            browser = driverConfig.BrowserValue;
-            remoteCapabilities = driverConfig.RemoteCapabilities;
+            Browser = driverConfig.BrowserValue;
+            RemoteCapabilities = driverConfig.RemoteCapabilities;
 
-            urlBuilder = new UrlBuilder(websiteConfig);
+            UrlBuilder = new UrlBuilder(websiteConfig);
 
-            DirectoryInfo info = new DirectoryInfo(currentDirectory);
-            while (info != info.Root && string.Compare(info.Name, "buck-out", StringComparison.OrdinalIgnoreCase) != 0 && string.Compare(info.Name, "build", StringComparison.OrdinalIgnoreCase) != 0)
-            {
-                info = info.Parent;
-            }
-
-            info = info.Parent;
-            webServer = new TestWebServer(info.FullName);
-            bool autoStartRemoteServer = false;
-            if (browser == Browser.Remote)
-            {
-                autoStartRemoteServer = driverConfig.AutoStartRemoteServer;
-            }
-
-            remoteServer = new RemoteSeleniumServer(info.FullName, autoStartRemoteServer);
+            WebServer = new TestWebServer(UrlBuilder.BaseUrl, currentDirectory);
         }
 
         ~EnvironmentManager()
         {
-            if (remoteServer != null)
-            {
-                remoteServer.Stop();
-            }
-            if (webServer != null)
-            {
-                webServer.Stop();
-            }
-            if (driver != null)
-            {
-                driver.Quit();
-            }
+            WebServer?.Stop();
+            driver?.Quit();
         }
 
-        public Browser Browser 
-        {
-            get { return browser; }
-        }
+        public Browser Browser { get; private set; }
 
         public string DriverServiceDirectory
         {
@@ -86,41 +54,17 @@ namespace SeleniumExtras.Environment
         {
             get
             {
-                string assemblyLocation = Path.GetDirectoryName(typeof(EnvironmentManager).Assembly.Location);
-                string testDirectory = TestContext.CurrentContext.TestDirectory;
-                if (assemblyLocation != testDirectory)
-                {
-                    return assemblyLocation;
-                }
-                return testDirectory;
+                return Path.GetDirectoryName(typeof(EnvironmentManager).Assembly.Location);
             }
         }
-        
-        public TestWebServer WebServer
-        {
-            get { return webServer; }
-        }
 
-        public RemoteSeleniumServer RemoteServer
-        {
-            get { return remoteServer; }
-        }
+        public TestWebServer WebServer { get; private set; }
 
-        public string RemoteCapabilities
-        {
-            get { return remoteCapabilities; }
-        }
+        public string RemoteCapabilities { get; private set; }
 
         public IWebDriver GetCurrentDriver()
         {
-            if (driver != null)
-            { 
-                return driver; 
-            }
-            else 
-            { 
-                return CreateFreshDriver(); 
-            }
+            return driver ?? CreateFreshDriver();
         }
 
         public IWebDriver CreateDriverInstance()
@@ -137,10 +81,7 @@ namespace SeleniumExtras.Environment
 
         public void CloseCurrentDriver()
         {
-            if (driver != null) 
-            {
-                driver.Quit(); 
-            }
+            driver?.Quit();
             driver = null;
         }
 
@@ -157,13 +98,7 @@ namespace SeleniumExtras.Environment
             }
         }
 
-        public UrlBuilder UrlBuilder
-        {
-            get
-            {
-                return urlBuilder;
-            }
-        }
+        public UrlBuilder UrlBuilder { get; private set; }
 
     }
 }
