@@ -127,6 +127,10 @@ namespace SeleniumExtras.PageObjects
             }
             return targetMethod.Invoke(Element, args);
         }
+
+        public override bool Equals(object obj) => Element.Equals(obj);
+
+        public override int GetHashCode() => Element.GetHashCode();
 #endif
     }
 }
