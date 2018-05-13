@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;net46</TargetFrameworks>
     <AssemblyName>SeleniumExtras.PageObjects.Tests</AssemblyName>
   </PropertyGroup>
 
@@ -11,7 +11,7 @@
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="Selenium.WebDriver" Version="3.11.2" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.37.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.38.0.1" />
   </ItemGroup>
 
   <ItemGroup>

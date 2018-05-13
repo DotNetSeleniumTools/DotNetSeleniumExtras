@@ -1,37 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace SeleniumExtras.Environment
 {
     public class DriverFactory
     {
-        string driverPath;
+        private const string host = "127.0.0.1";
 
         public DriverFactory(string driverPath)
         {
             if (string.IsNullOrEmpty(driverPath))
             {
-                this.driverPath = TestContext.CurrentContext.TestDirectory;
+                this.DriverServicePath = TestContext.CurrentContext.TestDirectory;
             }
             else
             {
-                this.driverPath = driverPath;
+                this.DriverServicePath = driverPath;
             }
         }
 
-        public string DriverServicePath
-        {
-            get { return this.driverPath; }
-        }
+        public string DriverServicePath { get; }
 
         public IWebDriver CreateDriver(Type driverType)
         {
@@ -39,7 +34,8 @@ namespace SeleniumExtras.Environment
             IWebDriver driver = null;
             if (typeof(ChromeDriver).IsAssignableFrom(driverType))
             {
-                ChromeDriverService service = ChromeDriverService.CreateDefaultService(this.driverPath);
+                ChromeDriverService service = ChromeDriverService.CreateDefaultService(this.DriverServicePath);
+                service.HostName = host;
                 constructorArgTypeList.Add(typeof(ChromeDriverService));
                 ConstructorInfo ctorInfo = driverType.GetConstructor(constructorArgTypeList.ToArray());
                 return (IWebDriver)ctorInfo.Invoke(new object[] { service });
@@ -47,7 +43,8 @@ namespace SeleniumExtras.Environment
 
             if (typeof(InternetExplorerDriver).IsAssignableFrom(driverType))
             {
-                InternetExplorerDriverService service = InternetExplorerDriverService.CreateDefaultService(this.driverPath);
+                InternetExplorerDriverService service = InternetExplorerDriverService.CreateDefaultService(this.DriverServicePath);
+                service.HostName = host;
                 constructorArgTypeList.Add(typeof(InternetExplorerDriverService));
                 ConstructorInfo ctorInfo = driverType.GetConstructor(constructorArgTypeList.ToArray());
                 return (IWebDriver)ctorInfo.Invoke(new object[] { service });
@@ -55,7 +52,8 @@ namespace SeleniumExtras.Environment
 
             if (typeof(EdgeDriver).IsAssignableFrom(driverType))
             {
-                EdgeDriverService service = EdgeDriverService.CreateDefaultService(this.driverPath);
+                EdgeDriverService service = EdgeDriverService.CreateDefaultService(this.DriverServicePath);
+                service.HostName = host;
                 constructorArgTypeList.Add(typeof(EdgeDriverService));
                 ConstructorInfo ctorInfo = driverType.GetConstructor(constructorArgTypeList.ToArray());
                 return (IWebDriver)ctorInfo.Invoke(new object[] { service });
@@ -63,7 +61,8 @@ namespace SeleniumExtras.Environment
 
             if (typeof(FirefoxDriver).IsAssignableFrom(driverType))
             {
-                FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(this.driverPath);
+                FirefoxDriverService service = FirefoxDriverService.CreateDefaultService(this.DriverServicePath);
+                service.HostName = host;
                 constructorArgTypeList.Add(typeof(FirefoxDriverService));
                 ConstructorInfo ctorInfo = driverType.GetConstructor(constructorArgTypeList.ToArray());
                 return (IWebDriver)ctorInfo.Invoke(new object[] { service });
