@@ -1,13 +1,15 @@
 # DotNetSeleniumExtras
-Extra utilities for use with the Selenium .NET language bindings.
 
-This repository is a migration of code from the [Selenium project's](https://github.com/SeleniumHQ/selenium)
-.NET bindings. It consists of the `PageFactory` implementation and the `ExpectedConditions` classes from the
-Selenium.Support library.
+Nuget: [![NuGet](https://img.shields.io/nuget/dt/DotNetSeleniumExtras.PageObjects.Core.svg)](https://www.nuget.org/packages/DotNetSeleniumExtras.PageObjects.Core/)
 
-## THIS REPOSITORY WILL NOT ACCEPT ISSUES OR PULL REQUESTS UNTIL A NEW OWNER IS FOUND
+Library contains PageFactory and supporting classes.
 
-The code has been extracted here to preserve it for users, to provide a place for users to continue to use
-the existing implementations when the impelementations are removed from the Selenium project. It is hoped
-that this repo will serve as a starting point for a community-based implementation of the projects herein,
-at which point, this repo will no longer be necessary.
+This fork of [DotNetSeleniumExtras](https://github.com/DotNetSeleniumTools/DotNetSeleniumExtras) has the following changes:
+* .NET Core support
+* Ability to create custom FindsBy attributes (by inheriting from AbsractFindsByAttribute)
+
+Besides, some internal changes were made:
+* Removed dependencies on buck
+* Fixed browser tests
+
+Ideally, if the new maintainer for upstream repository is found, those changed would be pushed there, and this repository won't be needed.
