@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using SeleniumExtras.Environment;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using System;
+using SeleniumExtras.Environment;
 
 namespace SeleniumExtras.PageObjects
 {
@@ -50,6 +50,22 @@ namespace SeleniumExtras.PageObjects
             Assert.True(page.formElement.Equals(expectedElement));
             Assert.True(expectedElement.Equals(page.formElement));
             Assert.AreEqual(expectedElement.GetHashCode(), page.formElement.GetHashCode());
+        }
+
+        [Test]
+        public void ElementIsILocatable()
+        {
+            driver.Url = xhtmlTestPage;
+            var page = new PageFactoryTest.Page();
+
+            PageFactory.InitElements(driver, page);
+
+            var expectedElement = (ILocatable)driver.FindElement(By.Name("someForm"));
+
+            var iLocatableElement = page.formElement as ILocatable;
+            Assert.That(iLocatableElement, Is.Not.Null);
+            Assert.That(iLocatableElement.Coordinates.LocationInViewport,
+                Is.EqualTo(expectedElement.Coordinates.LocationInViewport));
         }
 
         [Test]
