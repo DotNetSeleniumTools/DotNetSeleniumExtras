@@ -304,6 +304,17 @@ namespace SeleniumExtras.PageObjects
             Assert.That((initElement as ILocatable).LocationOnScreenOnceScrolledIntoView, Is.EqualTo(expectedLocation));
         }
 
+        [Test]
+        public void UsingCustomFindsByAttribute()
+        {
+            mockDriver.Setup(_ => _.FindElement(It.Is<By>(x => x.Equals(new CustomBy("customCriteria"))))).Returns(mockElement.Object);
+            mockElement.Setup(_ => _.TagName).Returns("form");
+
+            var page = new CustomFindsByAttributePage();
+
+            AssertFindsElement(page, () => page.customFoundElement);
+        }
+
         #region Test helper methods
 
         private void ExpectOneLookup()
@@ -507,9 +518,23 @@ namespace SeleniumExtras.PageObjects
             }
         }
 
+        private sealed class CustomFindsByAttribute : AbstractFindsByAttribute
+        {
+            public override By Finder
+            {
+                get { return new CustomBy("customCriteria"); }
+            }
+        }
+
         private class CustomByPage
         {
             [FindsBy(How = How.Custom, Using = "customCriteria", CustomFinderType = typeof(CustomBy))]
+            public IWebElement customFoundElement;
+        }
+
+        private class CustomFindsByAttributePage
+        {
+            [CustomFindsBy]
             public IWebElement customFoundElement;
         }
 

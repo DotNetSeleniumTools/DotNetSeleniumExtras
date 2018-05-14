@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <None Update="appconfig.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="web\formPage.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -30,7 +30,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="web\overflow-body.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="web\xhtmlTest.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
