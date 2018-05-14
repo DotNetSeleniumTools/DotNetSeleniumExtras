@@ -86,6 +86,13 @@ namespace SeleniumExtras.PageObjects
         }
 
         [Test]
+        public void FindsElementInFindsByCreatedWithParametres()
+        {
+            var page = new PageWithValuesInConstructor();
+            AssertFindsElementByExactlyOneLookup(page, () => page.formElement);
+        }
+
+        [Test]
         public void FindsElementByNameIfUsingIsAbsent()
         {
             ExpectOneLookup();
@@ -395,6 +402,12 @@ namespace SeleniumExtras.PageObjects
         internal class Page
         {
             [FindsBy(How = How.Name, Using = "someForm")]
+            public IWebElement formElement;
+        }
+
+        internal class PageWithValuesInConstructor
+        {
+            [FindsBy(How.Name, "someForm")]
             public IWebElement formElement;
         }
 

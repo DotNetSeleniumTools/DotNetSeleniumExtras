@@ -62,6 +62,19 @@ namespace SeleniumExtras.PageObjects
     {
         private By finder = null;
 
+        public FindsByAttribute() { }
+
+        /// <summary>
+        /// Create <see cref="FindsByAttribute"/> instance
+        /// </summary>
+        /// <param name="how">Method used to look up the element</param>
+        /// <param name="using">Value to lookup by</param>
+        public FindsByAttribute(How how, string @using)
+        {
+            How = how;
+            Using = @using;
+        }
+
         /// <summary>
         /// Gets or sets the method used to look up the element
         /// </summary>
