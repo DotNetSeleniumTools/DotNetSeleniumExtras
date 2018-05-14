@@ -5,6 +5,10 @@
     <AssemblyName>SeleniumExtras.PageObjects.Tests</AssemblyName>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NoWarn>1701;1702;1705;0649</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
     <PackageReference Include="Moq" Version="4.8.2" />
