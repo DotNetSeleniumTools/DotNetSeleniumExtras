@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net45;net40;net35;netstandard2.0</TargetFrameworks>
@@ -15,5 +15,9 @@
   <ItemGroup>
     <PackageReference Include="Selenium.WebDriver" Version="3.12.0" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35'">$(MSBuildProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Client</FrameworkPathOverride>
+  </PropertyGroup>
 
 </Project>
