@@ -21,6 +21,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using OpenQA.Selenium;
+using SeleniumExtras.MemberBuilders;
+using SeleniumExtras.PageObjects.Tests;
 
 namespace SeleniumExtras.PageObjects
 {
@@ -30,6 +32,11 @@ namespace SeleniumExtras.PageObjects
     /// </summary>
     public class DefaultPageObjectMemberDecorator : IPageObjectMemberDecorator
     {
+        private static readonly List<IMemberBuilder> _memberBuilders = new List<IMemberBuilder> {
+            new WebElementListBuilder(),
+            new WebElementBuilder()
+        };
+
         /// <summary>
         /// Locates an element or list of elements for a Page Object member, and returns a
         /// proxy object for the element or list of elements.
@@ -38,7 +45,7 @@ namespace SeleniumExtras.PageObjects
         /// a class's member.</param>
         /// <param name="locator">The <see cref="IElementLocator"/> used to locate elements.</param>
         /// <returns>A transparent proxy to the WebDriver element object.</returns>
-        public object Decorate(MemberInfo member, IElementLocator locator)
+        public virtual object Decorate(MemberInfo member, IElementLocator locator)
         {
             FieldInfo field = member as FieldInfo;
             PropertyInfo property = member as PropertyInfo;
@@ -56,7 +63,7 @@ namespace SeleniumExtras.PageObjects
                 targetType = property.PropertyType;
             }
 
-            if (field == null & (property == null || !hasPropertySet))
+            if (field == null && (property == null || !hasPropertySet))
             {
                 return null;
             }
@@ -65,11 +72,28 @@ namespace SeleniumExtras.PageObjects
             if (bys.Count > 0)
             {
                 bool cache = ShouldCacheLookup(member);
-                object proxyObject = CreateProxyObject(targetType, locator, bys, cache);
-                return proxyObject;
+                return CreateObject(targetType, locator, bys, cache);
             }
 
             return null;
+        }
+
+        internal virtual IEnumerable<IMemberBuilder> GetMemberBuilders()
+        {
+            return _memberBuilders;
+        }
+
+        private object CreateObject(Type memberType, IElementLocator locator, IEnumerable<By> bys, bool cache)
+        {
+            foreach (var builder in GetMemberBuilders())
+            {
+                if (builder.CreateObject(memberType, locator, bys, cache, out object createdObject))
+                {
+                    return createdObject;
+                }
+            }
+
+            throw new ArgumentException($"Type of member '{memberType.Name}' is not IWebElement or IList<IWebElement>");
         }
 
         /// <summary>
@@ -148,25 +172,6 @@ namespace SeleniumExtras.PageObjects
             }
 
             return bys.AsReadOnly();
-        }
-
-        private static object CreateProxyObject(Type memberType, IElementLocator locator, IEnumerable<By> bys, bool cache)
-        {
-            object proxyObject = null;
-            if (memberType == typeof(IList<IWebElement>))
-            {
-                proxyObject = WebElementListProxy.CreateProxy(locator, bys, cache);
-            }
-            else if (memberType == typeof(IWebElement))
-            {
-                proxyObject = WebElementProxy.CreateProxy(locator, bys, cache);
-            }
-            else
-            {
-                throw new ArgumentException("Type of member '" + memberType.Name + "' is not IWebElement or IList<IWebElement>");
-            }
-
-            return proxyObject;
         }
     }
 }
