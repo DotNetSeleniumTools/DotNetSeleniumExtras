@@ -571,7 +571,7 @@ namespace SeleniumExtras.WaitHelpers
         }
 
         /// <summary>
-        /// An expectation for checking the AlterIsPresent
+        /// An expectation for checking the AlertIsPresent
         /// </summary>
         /// <returns>Alert </returns>
         public static Func<IWebDriver, IAlert> AlertIsPresent()
