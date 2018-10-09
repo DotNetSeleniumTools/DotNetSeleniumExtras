@@ -1,42 +1,32 @@
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Net;
 
 namespace SeleniumExtras.Environment
 {
     public class UrlBuilder
     {
         string protocol;
-        string hostName;
         string port;
         string securePort;
-        string path;
-        string alternateHostName;
 
-        public string AlternateHostName
-        {
-            get { return alternateHostName; }
-        }
+        public string AlternateHostName { get; }
 
-        public string HostName
-        {
-            get { return hostName; }
-        }
+        public string HostName { get; }
 
-        public string Path
-        {
-            get { return path; }
-        }
+        public string Path { get; }
+
+        public string BaseUrl { get; }
 
         public UrlBuilder(WebsiteConfig config)
         {
             protocol = config.Protocol;
-            hostName = config.HostName;
+            HostName = config.HostName;
             port = config.Port;
             securePort = config.SecurePort;
-            path = config.Folder;
+            Path = config.Folder;
             //Use the first IPv4 address that we find
             IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
-            foreach (IPAddress ip in Dns.GetHostEntry(hostName).AddressList)
+            foreach (IPAddress ip in Dns.GetHostEntry(HostName).AddressList)
             {
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
                 {
@@ -44,13 +34,14 @@ namespace SeleniumExtras.Environment
                     break;
                 }
             }
-            alternateHostName = ipAddress.ToString();
+            AlternateHostName = ipAddress.ToString();
+            BaseUrl = "http://" + HostName + ":" + port + "/";
         }
 
         public string LocalWhereIs(string page)
         {
             string location = string.Empty;
-            location = "http://localhost:" + port + "/" + path + "/" + page;
+            location = "http://localhost:" + port + "/" + Path + "/" + page;
 
             return location;
         }
@@ -58,7 +49,7 @@ namespace SeleniumExtras.Environment
         public string WhereIs(string page)
         {
             string location = string.Empty;
-            location = "http://" + hostName + ":" + port + "/" + path + "/" + page;
+            location = BaseUrl + Path + "/" + page;
 
             return location;
         }
@@ -66,7 +57,7 @@ namespace SeleniumExtras.Environment
         public string WhereElseIs(string page)
         {
             string location = string.Empty;
-            location = "http://" + alternateHostName + ":" + port + "/" + path + "/" + page;
+            location = "http://" + AlternateHostName + ":" + port + "/" + Path + "/" + page;
 
             return location;
         }
@@ -74,7 +65,7 @@ namespace SeleniumExtras.Environment
         public string WhereIsSecure(string page)
         {
             string location = string.Empty;
-            location = "https://" + hostName + ":" + securePort + "/" + path + "/" + page;
+            location = "https://" + HostName + ":" + securePort + "/" + Path + "/" + page;
 
             return location;
         }
