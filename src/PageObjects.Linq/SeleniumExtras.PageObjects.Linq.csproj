@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <AssemblyVersion>1.0</AssemblyVersion>
+    <FileVersion>1.0</FileVersion>
+    <Version>1.0</Version>
+    <PackageId>DotNetSeleniumExtras.PageObjects.Core.Linq</PackageId>
+    <Authors>Dreamescaper</Authors>
+    <Description>Disable Linq optimisations which are not suitable for proxied elements</Description>
+    <Copyright>Copyright 2018, Software Freedom Conservancy</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/Dreamescaper/DotNetSeleniumExtras/</PackageProjectUrl>
+  </PropertyGroup>
+
+</Project>

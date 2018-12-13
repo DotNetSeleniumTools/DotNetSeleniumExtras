@@ -1,11 +1,6 @@
-﻿#if NETSTANDARD2_0
+﻿using System.Collections.Generic;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using SeleniumExtras.PageObjects;
-
-namespace SeleniumExtras.PageObjects
+namespace System.Linq
 {
     /// <summary>
     /// Due to Linq optimized execution in dotnet core for IList, some methods lead to multiple elements retrieval.
@@ -27,17 +22,8 @@ namespace SeleniumExtras.PageObjects
 
         private static IEnumerable<T> ToEnumerable<T>(this IList<T> enumerable)
         {
-            IEnumerable<T> ToEnumerableInner(IList<T> e)
-            {
-                foreach (var element in e)
-                    yield return element;
-            }
-
-            return enumerable is WebElementListProxy
-                ? ToEnumerableInner(enumerable)
-                : enumerable;
+            foreach (var element in enumerable)
+                yield return element;
         }
     }
 }
-
-#endif

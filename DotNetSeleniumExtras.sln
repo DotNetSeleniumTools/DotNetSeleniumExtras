@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.Common.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.WaitHelpers", "src\WaitHelpers\SeleniumExtras.WaitHelpers.csproj", "{557CD7CE-C90B-43A7-81E4-BCD770E190E3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.PageObjects.Linq", "src\PageObjects.Linq\SeleniumExtras.PageObjects.Linq.csproj", "{F224B438-F355-4FC6-AECA-F93A5EEFE329}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.PageObjects.Linq.Tests", "test\PageObjects.Linq\SeleniumExtras.PageObjects.Linq.Tests.csproj", "{959C948F-FDED-4833-9024-12288848E9F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{557CD7CE-C90B-43A7-81E4-BCD770E190E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{557CD7CE-C90B-43A7-81E4-BCD770E190E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{557CD7CE-C90B-43A7-81E4-BCD770E190E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F224B438-F355-4FC6-AECA-F93A5EEFE329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F224B438-F355-4FC6-AECA-F93A5EEFE329}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F224B438-F355-4FC6-AECA-F93A5EEFE329}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F224B438-F355-4FC6-AECA-F93A5EEFE329}.Release|Any CPU.Build.0 = Release|Any CPU
+		{959C948F-FDED-4833-9024-12288848E9F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{959C948F-FDED-4833-9024-12288848E9F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{959C948F-FDED-4833-9024-12288848E9F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{959C948F-FDED-4833-9024-12288848E9F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
