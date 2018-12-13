@@ -7,8 +7,8 @@
     <Version>1.0</Version>
     <PackageId>DotNetSeleniumExtras.PageObjects.Core.Linq</PackageId>
     <Authors>Dreamescaper</Authors>
-    <Description>Disable Linq optimisations which are not suitable for proxied elements</Description>
-    <Copyright>Copyright 2018, Software Freedom Conservancy</Copyright>
+    <Description>Due to Linq optimized execution in dotnet core for IList, some methods lead to multiple elements retrieval. This package overrides some Linq methods to disable those optimizations.</Description>
+    <Copyright></Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/Dreamescaper/DotNetSeleniumExtras/</PackageProjectUrl>
   </PropertyGroup>
