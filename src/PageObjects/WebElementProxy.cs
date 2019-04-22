@@ -16,15 +16,14 @@
 // limitations under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Internal;
 
 #if !NETSTANDARD2_0
-using System;
 using System.Runtime.Remoting.Messaging;
-#else
 #endif
 
 namespace SeleniumExtras.PageObjects
@@ -114,7 +113,14 @@ namespace SeleniumExtras.PageObjects
                 return new ReturnMessage(element, null, 0, methodCallMessage.LogicalCallContext, methodCallMessage);
             }
 
-            return WebDriverObjectProxy.InvokeMethod(methodCallMessage, element);
+            try
+            {
+                return WebDriverObjectProxy.InvokeMethod(methodCallMessage, element);
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
+            }
         }
 #else
         protected override object Invoke(MethodInfo targetMethod, object[] args)
@@ -125,7 +131,15 @@ namespace SeleniumExtras.PageObjects
             {
                 return Element;
             }
-            return targetMethod.Invoke(Element, args);
+
+            try
+            {
+                return targetMethod.Invoke(Element, args);
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
+            }
         }
 
         public override bool Equals(object obj) => Element.Equals(obj);

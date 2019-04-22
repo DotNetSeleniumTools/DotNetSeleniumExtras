@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using OpenQA.Selenium;
+using System.Reflection;
 
 #if !NETSTANDARD2_0
 using System;
@@ -102,12 +103,27 @@ namespace SeleniumExtras.PageObjects
         public override IMessage Invoke(IMessage msg)
         {
             var elements = this.ElementList;
-            return WebDriverObjectProxy.InvokeMethod(msg as IMethodCallMessage, elements);
+
+            try
+            {
+                return WebDriverObjectProxy.InvokeMethod(msg as IMethodCallMessage, elements);
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
+            }
         }
 #else
         protected override object Invoke(MethodInfo targetMethod, object[] args)
-        {
-            return targetMethod.Invoke(ElementList, args);
+        {        
+            try
+            {
+                return targetMethod.Invoke(ElementList, args);
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException ?? e;
+            }
         }
 #endif
     }

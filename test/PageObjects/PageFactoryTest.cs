@@ -322,6 +322,20 @@ namespace SeleniumExtras.PageObjects
             AssertFindsElement(page, () => page.customFoundElement);
         }
 
+        [Test]
+        public void ElementExceptionsAreThrownDirectly()
+        {
+            const string exceptionMessage = "TestException";
+            mockDriver.Setup(_ => _.FindElement(It.Is<By>(x => x.Equals(new CustomBy("customCriteria"))))).Returns(mockElement.Object);
+            mockElement.Setup(_ => _.TagName).Throws(new Exception(exceptionMessage));
+
+            var page = new CustomFindsByAttributePage();
+            PageFactory.InitElements(mockDriver.Object, page);
+
+            Assert.That(() => page.customFoundElement.TagName,
+                Throws.Exception.Message.EqualTo(exceptionMessage));
+        }
+
         #region Test helper methods
 
         private void ExpectOneLookup()
