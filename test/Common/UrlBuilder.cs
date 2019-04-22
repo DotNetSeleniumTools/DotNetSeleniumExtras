@@ -5,9 +5,9 @@ namespace SeleniumExtras.Environment
 {
     public class UrlBuilder
     {
-        string protocol;
-        string port;
-        string securePort;
+        private string protocol;
+        private string port;
+        private string securePort;
 
         public string AlternateHostName { get; }
 

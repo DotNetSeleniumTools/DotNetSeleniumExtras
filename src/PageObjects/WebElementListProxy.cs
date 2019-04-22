@@ -23,8 +23,6 @@ using System.Reflection;
 #if !NETSTANDARD2_0
 using System;
 using System.Runtime.Remoting.Messaging;
-#else
-using System.Reflection;
 #endif
 
 namespace SeleniumExtras.PageObjects

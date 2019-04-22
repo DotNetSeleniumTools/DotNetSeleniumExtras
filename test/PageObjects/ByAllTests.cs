@@ -16,13 +16,13 @@ limitations under the License.
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Is = NUnit.Framework.Is;
 using OpenQA.Selenium;
+using Is = NUnit.Framework.Is;
 
 namespace SeleniumExtras.PageObjects
 {
     [TestFixture]
-    class ByAllTests
+    public class ByAllTests
     {
         [Test]
         public void FindElementZeroBy()
@@ -52,7 +52,7 @@ namespace SeleniumExtras.PageObjects
 
             driver.Verify(_ => _.FindElementsByName("cheese"), Times.AtLeastOnce);
         }
-        
+
         [Test]
         public void FindElementOneByEmpty()
         {
@@ -114,7 +114,7 @@ namespace SeleniumExtras.PageObjects
             driver.Setup(_ => _.FindElementsByName(It.Is<string>(x => x == "photo"))).Returns(elems34);
 
             var by = new ByAll(By.Name("cheese"), By.Name("photo"));
-            
+
             Assert.Throws<NoSuchElementException>(() => by.FindElement(driver.Object));
 
             var result = by.FindElements(driver.Object);
