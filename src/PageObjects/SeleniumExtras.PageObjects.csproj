@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net40;net35;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <AssemblyName>SeleniumExtras.PageObjects</AssemblyName>
     <RootNamespace>SeleniumExtras</RootNamespace>
-    <AssemblyVersion>3.12.0.0</AssemblyVersion>
-    <FileVersion>3.12.0.0</FileVersion>
-    <Version>3.12.0.0</Version>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <FileVersion>4.0.0.0</FileVersion>
+    <Version>4.0.0-alpha01</Version>
     <PackageId>DotNetSeleniumExtras.PageObjects.Core</PackageId>
     <Authors>Dreamescaper</Authors>
     <Description>Fork of DotNetSeleniumExtras with enabled dotnet core support and other features</Description>
@@ -16,11 +16,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Selenium.WebDriver" Version="3.12.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.0.0-alpha01" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.Reflection.DispatchProxy" Version="4.4.0" />
+    <PackageReference Include="System.Reflection.DispatchProxy" Version="4.5.1" />
   </ItemGroup>
 
   <PropertyGroup>

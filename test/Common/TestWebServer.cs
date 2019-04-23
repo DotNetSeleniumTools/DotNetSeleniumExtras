@@ -6,10 +6,10 @@ namespace SeleniumExtras.Environment
 {
     public class TestWebServer
     {
-        private WebServer webServer;
+        private IWebServer webServer;
 
-        private string url;
-        private string htmlPath;
+        private readonly string url;
+        private readonly string htmlPath;
 
         public TestWebServer(string url, string htmlPath)
         {
@@ -34,7 +34,7 @@ namespace SeleniumExtras.Environment
         {
             if (webServer != null)
             {
-                webServer.Dispose();
+                (webServer as IDisposable)?.Dispose();
                 webServer = null;
             }
         }
