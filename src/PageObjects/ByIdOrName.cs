@@ -41,7 +41,7 @@ namespace SeleniumExtras.PageObjects
         {
             if (string.IsNullOrEmpty(elementIdentifier))
             {
-                throw new ArgumentException("element identifier cannot be null or the empty string", "elementIdentifier");
+                throw new ArgumentException("element identifier cannot be null or the empty string", nameof(elementIdentifier));
             }
 
             this.elementIdentifier = elementIdentifier;

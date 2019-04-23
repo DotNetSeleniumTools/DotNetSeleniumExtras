@@ -58,7 +58,7 @@ namespace SeleniumExtras.PageObjects
         {
             if (bys == null)
             {
-                throw new ArgumentNullException("bys", "List of criteria may not be null");
+                throw new ArgumentNullException(nameof(bys), "List of criteria may not be null");
             }
 
             string errorString = null;
@@ -86,7 +86,7 @@ namespace SeleniumExtras.PageObjects
         {
             if (bys == null)
             {
-                throw new ArgumentNullException("bys", "List of criteria may not be null");
+                throw new ArgumentNullException(nameof(bys), "List of criteria may not be null");
             }
 
             List<IWebElement> collection = new List<IWebElement>();

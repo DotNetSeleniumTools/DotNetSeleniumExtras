@@ -33,8 +33,10 @@ namespace SeleniumExtras.PageObjects
     public class DefaultPageObjectMemberDecorator : IPageObjectMemberDecorator
     {
         private static readonly List<IMemberBuilder> _memberBuilders = new List<IMemberBuilder> {
+            new WebElementBuilder(),
             new WebElementListBuilder(),
-            new WebElementBuilder()
+            new WrappedElementBuilder(),
+            new WrappedElementListBuilder()
         };
 
         /// <summary>

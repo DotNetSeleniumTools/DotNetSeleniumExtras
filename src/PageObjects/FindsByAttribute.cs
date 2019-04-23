@@ -60,7 +60,7 @@ namespace SeleniumExtras.PageObjects
     /// </remarks>
     public sealed class FindsByAttribute : AbstractFindsByAttribute
     {
-        private By finder = null;
+        private By finder;
 
         public FindsByAttribute() { }
 

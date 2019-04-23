@@ -6,18 +6,16 @@ using SeleniumExtras.PageObjects.Tests;
 
 namespace SeleniumExtras.MemberBuilders
 {
-    /// <summary>
-    /// Creates member of <see cref="IList{IWebElement}"/> type
-    /// </summary>
-    internal class WebElementListBuilder : IMemberBuilder
+    public class WrappedElementBuilder : IMemberBuilder
     {
         public bool CreateObject(Type memberType, IElementLocator locator, IEnumerable<By> bys, bool cache, out object createdObject)
         {
             createdObject = null;
 
-            if (memberType == typeof(IList<IWebElement>))
+            if (typeof(IWrapsElement).IsAssignableFrom(memberType))
             {
-                createdObject = new WebElementListProxy(locator, bys, cache);
+                var webElement = WebElementProxy.CreateProxy(locator, bys, cache);
+                createdObject = WrapsElementFactory.Wrap(memberType, webElement);
                 return true;
             }
 

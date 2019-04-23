@@ -18,6 +18,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using OpenQA.Selenium;
 
 namespace SeleniumExtras.PageObjects
@@ -25,9 +26,9 @@ namespace SeleniumExtras.PageObjects
     /// <summary>
     /// Represents a proxy class for a list of elements to be used with the PageFactory.
     /// </summary>
-    internal class WebElementListProxy : IList<IWebElement>
+    internal class WrapsElementListProxy<T> : IList<T> where T : IWrapsElement
     {
-        public WebElementListProxy(IElementLocator elementLocator, IEnumerable<By> bys, bool cache)
+        public WrapsElementListProxy(IElementLocator elementLocator, IEnumerable<By> bys, bool cache)
         {
             _elementLocator = elementLocator;
             _bys = bys;
@@ -38,14 +39,19 @@ namespace SeleniumExtras.PageObjects
         private readonly IEnumerable<By> _bys;
         private readonly bool _cache;
 
-        private IList<IWebElement> _items;
-        private IList<IWebElement> Items
+        private IList<T> _items;
+        private IList<T> Items
         {
             get
             {
+                // Find elements, and wrap them in IWrapsElement instances.
+                // If caching enabled - use previously found elements, if any.
                 if (_items == null || !_cache)
                 {
-                    _items = _elementLocator.LocateElements(_bys);
+                    _items = _elementLocator
+                        .LocateElements(_bys)
+                        .Select(WrapsElementFactory.Wrap<T>)
+                        .ToList();
                 }
                 return _items;
             }
@@ -53,7 +59,7 @@ namespace SeleniumExtras.PageObjects
 
         #region Forwarded Items calls
 
-        public IWebElement this[int index]
+        public T this[int index]
         {
             get { return Items[index]; }
             set { Items[index] = value; }
@@ -63,21 +69,21 @@ namespace SeleniumExtras.PageObjects
 
         public bool IsReadOnly => Items.IsReadOnly;
 
-        public void Add(IWebElement item) => Items.Add(item);
+        public void Add(T item) => Items.Add(item);
 
         public void Clear() => Items.Clear();
 
-        public bool Contains(IWebElement item) => Items.Contains(item);
+        public bool Contains(T item) => Items.Contains(item);
 
-        public void CopyTo(IWebElement[] array, int arrayIndex) => Items.CopyTo(array, arrayIndex);
+        public void CopyTo(T[] array, int arrayIndex) => Items.CopyTo(array, arrayIndex);
 
-        public IEnumerator<IWebElement> GetEnumerator() => Items.GetEnumerator();
+        public IEnumerator<T> GetEnumerator() => Items.GetEnumerator();
 
-        public int IndexOf(IWebElement item) => Items.IndexOf(item);
+        public int IndexOf(T item) => Items.IndexOf(item);
 
-        public void Insert(int index, IWebElement item) => Items.Insert(index, item);
+        public void Insert(int index, T item) => Items.Insert(index, item);
 
-        public bool Remove(IWebElement item) => Items.Remove(item);
+        public bool Remove(T item) => Items.Remove(item);
 
         public void RemoveAt(int index) => Items.RemoveAt(index);
 

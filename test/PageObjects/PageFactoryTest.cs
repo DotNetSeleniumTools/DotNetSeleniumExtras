@@ -5,7 +5,6 @@ using System.Drawing;
 using Moq;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Internal;
 
 namespace SeleniumExtras.PageObjects
 {
@@ -291,7 +290,7 @@ namespace SeleniumExtras.PageObjects
             var initElement = page.formElement;
 
             Assert.That(initElement, Is.InstanceOf<IWrapsElement>());
-            Assert.That((initElement as IWrapsElement).WrappedElement, Is.Not.Null);
+            Assert.That((initElement as IWrapsElement)?.WrappedElement, Is.Not.Null);
         }
 
         [Test]
@@ -308,7 +307,7 @@ namespace SeleniumExtras.PageObjects
             var initElement = page.formElement;
 
             Assert.That(initElement, Is.InstanceOf<ILocatable>());
-            Assert.That((initElement as ILocatable).LocationOnScreenOnceScrolledIntoView, Is.EqualTo(expectedLocation));
+            Assert.That((initElement as ILocatable)?.LocationOnScreenOnceScrolledIntoView, Is.EqualTo(expectedLocation));
         }
 
         [Test]
@@ -334,6 +333,62 @@ namespace SeleniumExtras.PageObjects
 
             Assert.That(() => page.customFoundElement.TagName,
                 Throws.Exception.Message.EqualTo(exceptionMessage));
+        }
+
+        [Test]
+        public void CreateWrapsElement_WithConstructor()
+        {
+            mockDriver.Setup(_ => _.FindElement(It.Is<By>(x => x.Equals(By.Name("someForm"))))).Returns(mockElement.Object);
+
+            var page = new PageWithWrapsElements();
+            PageFactory.InitElements(mockDriver.Object, page);
+
+            Assert.That(page.wrapsWithConstructor?.WrappedElement, Is.Not.Null);
+        }
+
+        [Test]
+        public void CreateWrapsElement_WithPropertySetter()
+        {
+            mockDriver.Setup(_ => _.FindElement(It.Is<By>(x => x.Equals(By.Name("someForm"))))).Returns(mockElement.Object);
+
+            var page = new PageWithWrapsElements();
+            PageFactory.InitElements(mockDriver.Object, page);
+
+            Assert.That(page.wrapsWithSetter?.WrappedElement, Is.Not.Null);
+        }
+
+        [Test]
+        public void CreateListOfWrapsElement_WithConstructor()
+        {
+            var elements = new ReadOnlyCollection<IWebElement>(new List<IWebElement> { mockElement.Object, mockElement.Object });
+            mockDriver.Setup(_ => _.FindElements(It.Is<By>(x => x.Equals(By.Name("someForm"))))).Returns(elements);
+
+            var page = new PageWithWrapsElements();
+            PageFactory.InitElements(mockDriver.Object, page);
+
+            Assert.That(page.listOfWrapsWithConstructor?.Count, Is.EqualTo(elements.Count));
+
+            foreach (var wrapsElement in page.listOfWrapsWithConstructor)
+            {
+                Assert.That(wrapsElement.WrappedElement, Is.Not.Null);
+            }
+        }
+
+        [Test]
+        public void CreateListOfWrapsElement_WithPropertySetter()
+        {
+            var elements = new ReadOnlyCollection<IWebElement>(new List<IWebElement> { mockElement.Object, mockElement.Object });
+            mockDriver.Setup(_ => _.FindElements(It.Is<By>(x => x.Equals(By.Name("someForm"))))).Returns(elements);
+
+            var page = new PageWithWrapsElements();
+            PageFactory.InitElements(mockDriver.Object, page);
+
+            Assert.That(page.listOfWrapsWithSetter?.Count, Is.EqualTo(elements.Count));
+
+            foreach (var wrapsElement in page.listOfWrapsWithSetter)
+            {
+                Assert.That(wrapsElement.WrappedElement, Is.Not.Null);
+            }
         }
 
         #region Test helper methods
@@ -617,6 +672,36 @@ namespace SeleniumExtras.PageObjects
         {
             [FindsBy(How = How.Name, Using = "someForm")]
             public ReadOnlyCollection<IWebElement> myElement;
+        }
+
+        private class PageWithWrapsElements
+        {
+            [FindsBy(How = How.Name, Using = "someForm")]
+            public WrapsElementWithConstructor wrapsWithConstructor;
+
+            [FindsBy(How = How.Name, Using = "someForm")]
+            public WrapsElementWithSetter wrapsWithSetter;
+
+            [FindsBy(How = How.Name, Using = "someForm")]
+            public IList<WrapsElementWithConstructor> listOfWrapsWithConstructor;
+
+            [FindsBy(How = How.Name, Using = "someForm")]
+            public IList<WrapsElementWithSetter> listOfWrapsWithSetter;
+        }
+
+        private class WrapsElementWithConstructor : IWrapsElement
+        {
+            public IWebElement WrappedElement { get; }
+
+            public WrapsElementWithConstructor(IWebElement e)
+            {
+                WrappedElement = e;
+            }
+        }
+
+        private class WrapsElementWithSetter : IWrapsElement
+        {
+            public IWebElement WrappedElement { get; private set; }
         }
 
         #endregion

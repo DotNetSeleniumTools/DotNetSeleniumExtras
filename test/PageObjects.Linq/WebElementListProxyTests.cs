@@ -28,7 +28,7 @@ namespace SeleniumExtras.PageObjects.Linq
         [Test]
         public void LinqSelectShouldRetrieveElementsOnce()
         {
-            var elements = WebElementListProxy.CreateProxy(new DefaultElementLocator(driverMock.Object), new[] { by }, false);
+            var elements = new WebElementListProxy(new DefaultElementLocator(driverMock.Object), new[] { by }, false);
 
             var texts = elements.Select(e => e.Text).ToList();
 
@@ -38,7 +38,7 @@ namespace SeleniumExtras.PageObjects.Linq
         [Test]
         public void LinqSelectManyShouldRetrieveElementsOnce()
         {
-            var elements = WebElementListProxy.CreateProxy(new DefaultElementLocator(driverMock.Object), new[] { by }, false);
+            var elements = new WebElementListProxy(new DefaultElementLocator(driverMock.Object), new[] { by }, false);
 
             var texts = elements.SelectMany(e => e.Text).ToList();
 
@@ -48,7 +48,7 @@ namespace SeleniumExtras.PageObjects.Linq
         [Test]
         public void LinqWhereShouldRetrieveElementsOnce()
         {
-            var elements = WebElementListProxy.CreateProxy(new DefaultElementLocator(driverMock.Object), new[] { by }, false);
+            var elements = new WebElementListProxy(new DefaultElementLocator(driverMock.Object), new[] { by }, false);
 
             var texts = elements.Where(e => e.Text == "a").ToList();
 
@@ -58,7 +58,7 @@ namespace SeleniumExtras.PageObjects.Linq
         [Test]
         public void LinqToListShouldRetrieveElementsOnce()
         {
-            var elements = WebElementListProxy.CreateProxy(new DefaultElementLocator(driverMock.Object), new[] { by }, false);
+            var elements = new WebElementListProxy(new DefaultElementLocator(driverMock.Object), new[] { by }, false);
 
             var texts = elements.ToList();
 
@@ -68,7 +68,7 @@ namespace SeleniumExtras.PageObjects.Linq
         [Test]
         public void LinqToArrayShouldRetrieveElementsOnce()
         {
-            var elements = WebElementListProxy.CreateProxy(new DefaultElementLocator(driverMock.Object), new[] { by }, false);
+            var elements = new WebElementListProxy(new DefaultElementLocator(driverMock.Object), new[] { by }, false);
 
             var texts = elements.ToArray();
 

@@ -80,7 +80,6 @@ namespace SeleniumExtras.PageObjects
         /// </exception>
         public static T InitElements<T>(IElementLocator locator)
         {
-            T page = default(T);
             Type pageClassType = typeof(T);
             ConstructorInfo ctor = pageClassType.GetConstructor(new Type[] { typeof(IWebDriver) });
             if (ctor == null)
@@ -90,16 +89,16 @@ namespace SeleniumExtras.PageObjects
 
             if (locator == null)
             {
-                throw new ArgumentNullException("locator", "locator cannot be null");
+                throw new ArgumentNullException(nameof(locator), "locator cannot be null");
             }
 
             IWebDriver driver = locator.SearchContext as IWebDriver;
             if (driver == null)
             {
-                throw new ArgumentException("The search context of the element locator must implement IWebDriver", "locator");
+                throw new ArgumentException("The search context of the element locator must implement IWebDriver", nameof(locator));
             }
 
-            page = (T)ctor.Invoke(new object[] { locator.SearchContext as IWebDriver });
+            var page = (T)ctor.Invoke(new object[] { locator.SearchContext as IWebDriver });
             InitElements(page, locator);
             return page;
         }
@@ -165,22 +164,22 @@ namespace SeleniumExtras.PageObjects
         {
             if (page == null)
             {
-                throw new ArgumentNullException("page", "page cannot be null");
+                throw new ArgumentNullException(nameof(page), "page cannot be null");
             }
 
             if (locator == null)
             {
-                throw new ArgumentNullException("locator", "locator cannot be null");
+                throw new ArgumentNullException(nameof(locator), "locator cannot be null");
             }
 
             if (decorator == null)
             {
-                throw new ArgumentNullException("locator", "decorator cannot be null");
+                throw new ArgumentNullException(nameof(locator), "decorator cannot be null");
             }
 
             if (locator.SearchContext == null)
             {
-                throw new ArgumentException("The SearchContext of the locator object cannot be null", "locator");
+                throw new ArgumentException("The SearchContext of the locator object cannot be null", nameof(locator));
             }
 
             const BindingFlags PublicBindingOptions = BindingFlags.Instance | BindingFlags.Public;
@@ -209,13 +208,11 @@ namespace SeleniumExtras.PageObjects
                     continue;
                 }
 
-                var field = member as FieldInfo;
-                var property = member as PropertyInfo;
-                if (field != null)
+                if (member is FieldInfo field)
                 {
                     field.SetValue(page, decoratedValue);
                 }
-                else if (property != null)
+                else if (member is PropertyInfo property && property.CanWrite)
                 {
                     property.SetValue(page, decoratedValue, null);
                 }

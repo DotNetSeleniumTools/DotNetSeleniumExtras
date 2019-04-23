@@ -125,13 +125,13 @@ namespace SeleniumExtras.PageObjects
         {
             if (obj == null)
             {
-                throw new ArgumentNullException("obj", "Object to compare cannot be null");
+                throw new ArgumentNullException(nameof(obj), "Object to compare cannot be null");
             }
 
             AbstractFindsByAttribute other = obj as AbstractFindsByAttribute;
             if (other == null)
             {
-                throw new ArgumentException("Object to compare must be a AbstractFindsByAttribute", "obj");
+                throw new ArgumentException("Object to compare must be a AbstractFindsByAttribute", nameof(obj));
             }
 
             // TODO(JimEvans): Construct an algorithm to sort on more than just Priority.
