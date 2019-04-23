@@ -20,11 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Internal;
-
-#if !NETSTANDARD2_0
-using System.Runtime.Remoting.Messaging;
-#endif
 
 namespace SeleniumExtras.PageObjects
 {
@@ -34,21 +29,6 @@ namespace SeleniumExtras.PageObjects
     public class WebElementProxy : WebDriverObjectProxy, IWrapsElement
     {
         private IWebElement cachedElement;
-
-#if !NETSTANDARD2_0
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WebElementProxy"/> class.
-        /// </summary>
-        /// <param name="classToProxy">The <see cref="Type"/> of object for which to create a proxy.</param>
-        /// <param name="locator">The <see cref="IElementLocator"/> implementation that determines
-        /// how elements are located.</param>
-        /// <param name="bys">The list of methods by which to search for the elements.</param>
-        /// <param name="cache"><see langword="true"/> to cache the lookup to the element; otherwise, <see langword="false"/>.</param>
-        private WebElementProxy(Type classToProxy, IElementLocator locator, IEnumerable<By> bys, bool cache)
-            : base(classToProxy, locator, bys, cache)
-        {
-        }
-#endif
 
         /// <summary>
         /// Gets the <see cref="IWebElement"/> wrapped by this object.
@@ -83,46 +63,13 @@ namespace SeleniumExtras.PageObjects
         /// <param name="bys">The list of methods by which to search for the elements.</param>
         /// <param name="cacheLookups"><see langword="true"/> to cache the lookup to the element; otherwise, <see langword="false"/>.</param>
         /// <returns>An object used to proxy calls to properties and methods of the list of <see cref="IWebElement"/> objects.</returns>
-        public static object CreateProxy(IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
+        public static IWebElement CreateProxy(IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
         {
-#if !NETSTANDARD2_0
-            return new WebElementProxy(typeof(IProxiedWebElement), locator, bys, cacheLookups).GetTransparentProxy();
-#else
             var proxy = Create<IProxiedWebElement, WebElementProxy>();
-            ((WebElementProxy)(object)proxy).SetSearchProperites(locator, bys, cacheLookups);
+            ((WebElementProxy)proxy).SetSearchProperites(locator, bys, cacheLookups);
             return proxy;
-#endif
         }
 
-#if !NETSTANDARD2_0
-        /// <summary>
-        /// Invokes the method that is specified in the provided <see cref="IMessage"/> on the
-        /// object that is represented by the current instance.
-        /// </summary>
-        /// <param name="msg">An <see cref="IMessage"/> that contains a dictionary of
-        /// information about the method call. </param>
-        /// <returns>The message returned by the invoked method, containing the return value and any
-        /// out or ref parameters.</returns>
-        public override IMessage Invoke(IMessage msg)
-        {
-            var element = this.Element;
-            IMethodCallMessage methodCallMessage = msg as IMethodCallMessage;
-
-            if (typeof(IWrapsElement).IsAssignableFrom((methodCallMessage.MethodBase as MethodInfo).DeclaringType))
-            {
-                return new ReturnMessage(element, null, 0, methodCallMessage.LogicalCallContext, methodCallMessage);
-            }
-
-            try
-            {
-                return WebDriverObjectProxy.InvokeMethod(methodCallMessage, element);
-            }
-            catch (TargetInvocationException e)
-            {
-                throw e.InnerException ?? e;
-            }
-        }
-#else
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
             var decalringType = targetMethod.DeclaringType;
@@ -145,6 +92,5 @@ namespace SeleniumExtras.PageObjects
         public override bool Equals(object obj) => Element.Equals(obj);
 
         public override int GetHashCode() => Element.GetHashCode();
-#endif
     }
 }

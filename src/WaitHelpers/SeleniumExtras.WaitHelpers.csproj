@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net46;netstandard2.0</TargetFrameworks>
     <AssemblyName>SeleniumExtras.WaitHelpers</AssemblyName>
     <RootNamespace>SeleniumExtras</RootNamespace>
     <PackageId>DotNetSeleniumExtras.WaitHelpers</PackageId>
@@ -15,9 +15,5 @@
   <ItemGroup>
     <PackageReference Include="Selenium.WebDriver" Version="3.12.0" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net35'">$(MSBuildProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Client</FrameworkPathOverride>
-  </PropertyGroup>
 
 </Project>
