@@ -26,30 +26,25 @@ namespace SeleniumExtras.PageObjects
     /// <summary>
     /// Represents a proxy class for a list of elements to be used with the PageFactory.
     /// </summary>
-    internal class WrapsElementListProxy<T> : IList<T> where T : IWrapsElement
+    internal class WrapsElementListProxy<T> : WebDriverObjectProxy, IList<T> where T : IWrapsElement
     {
-        public WrapsElementListProxy(IElementLocator elementLocator, IEnumerable<By> bys, bool cache)
+        private IList<T> _items;
+
+        public WrapsElementListProxy(IElementLocator locator, IEnumerable<By> bys, bool cache)
+            : base(locator, bys, cache)
         {
-            _elementLocator = elementLocator;
-            _bys = bys;
-            _cache = cache;
         }
 
-        private readonly IElementLocator _elementLocator;
-        private readonly IEnumerable<By> _bys;
-        private readonly bool _cache;
-
-        private IList<T> _items;
         private IList<T> Items
         {
             get
             {
                 // Find elements, and wrap them in IWrapsElement instances.
                 // If caching enabled - use previously found elements, if any.
-                if (_items == null || !_cache)
+                if (_items == null || !Cache)
                 {
-                    _items = _elementLocator
-                        .LocateElements(_bys)
+                    _items = Locator
+                        .LocateElements(Bys)
                         .Select(WrapsElementFactory.Wrap<T>)
                         .ToList();
                 }

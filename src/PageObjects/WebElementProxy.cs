@@ -16,32 +16,30 @@
 // limitations under the License.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Collections.ObjectModel;
+using System.Drawing;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions.Internal;
 
 namespace SeleniumExtras.PageObjects
 {
     /// <summary>
     /// Intercepts the request to a single <see cref="IWebElement"/>
     /// </summary>
-    public class WebElementProxy : WebDriverObjectProxy, IWrapsElement
+    internal class WebElementProxy : WebDriverObjectProxy, IWrapsElement, IWebElement, ILocatable
     {
         private IWebElement cachedElement;
 
-        /// <summary>
-        /// Gets the <see cref="IWebElement"/> wrapped by this object.
-        /// </summary>
-        public virtual IWebElement WrappedElement
+        public WebElementProxy(IElementLocator locator, IEnumerable<By> bys, bool cache)
+            : base(locator, bys, cache)
         {
-            get { return this.Element; }
         }
 
         /// <summary>
         /// Gets the IWebElement object this proxy represents, returning a cached one if requested.
         /// </summary>
-        private IWebElement Element
+        public IWebElement WrappedElement
         {
             get
             {
@@ -54,43 +52,50 @@ namespace SeleniumExtras.PageObjects
             }
         }
 
-        /// <summary>
-        /// Creates an object used to proxy calls to properties and methods of an <see cref="IWebElement"/> object.
-        /// </summary>
-        /// <param name="classToProxy">The <see cref="Type"/> of object for which to create a proxy.</param>
-        /// <param name="locator">The <see cref="IElementLocator"/> implementation that
-        /// determines how elements are located.</param>
-        /// <param name="bys">The list of methods by which to search for the elements.</param>
-        /// <param name="cacheLookups"><see langword="true"/> to cache the lookup to the element; otherwise, <see langword="false"/>.</param>
-        /// <returns>An object used to proxy calls to properties and methods of the list of <see cref="IWebElement"/> objects.</returns>
-        public static IWebElement CreateProxy(IElementLocator locator, IEnumerable<By> bys, bool cacheLookups)
-        {
-            var proxy = Create<IProxiedWebElement, WebElementProxy>();
-            ((WebElementProxy)proxy).SetSearchProperites(locator, bys, cacheLookups);
-            return proxy;
-        }
+        #region Forwarded WrappedElement calls
 
-        protected override object Invoke(MethodInfo targetMethod, object[] args)
-        {
-            var decalringType = targetMethod.DeclaringType;
+        public string TagName => WrappedElement.TagName;
 
-            if (decalringType == typeof(IWrapsElement))
-            {
-                return Element;
-            }
+        public string Text => WrappedElement.Text;
 
-            try
-            {
-                return targetMethod.Invoke(Element, args);
-            }
-            catch (TargetInvocationException e)
-            {
-                throw e.InnerException ?? e;
-            }
-        }
+        public bool Enabled => WrappedElement.Enabled;
 
-        public override bool Equals(object obj) => Element.Equals(obj);
+        public bool Selected => WrappedElement.Selected;
 
-        public override int GetHashCode() => Element.GetHashCode();
+        public Point Location => WrappedElement.Location;
+
+        public Size Size => WrappedElement.Size;
+
+        public bool Displayed => WrappedElement.Displayed;
+
+        public void Clear() => WrappedElement.Clear();
+
+        public void Click() => WrappedElement.Click();
+
+        public IWebElement FindElement(By by) => WrappedElement.FindElement(by);
+
+        public ReadOnlyCollection<IWebElement> FindElements(By by) => WrappedElement.FindElements(by);
+
+        public string GetAttribute(string attributeName) => WrappedElement.GetAttribute(attributeName);
+
+        public string GetCssValue(string propertyName) => WrappedElement.GetCssValue(propertyName);
+
+        public string GetProperty(string propertyName) => WrappedElement.GetProperty(propertyName);
+
+        public void SendKeys(string text) => WrappedElement.SendKeys(text);
+
+        public void Submit() => WrappedElement.Submit();
+
+        public Point LocationOnScreenOnceScrolledIntoView
+            => ((ILocatable)WrappedElement).LocationOnScreenOnceScrolledIntoView;
+
+        public ICoordinates Coordinates
+            => ((ILocatable)WrappedElement).Coordinates;
+
+        public override int GetHashCode() => WrappedElement.GetHashCode();
+
+        public override bool Equals(object obj) => WrappedElement.Equals(obj);
+
+        #endregion Forwarded WrappedElement calls
     }
 }

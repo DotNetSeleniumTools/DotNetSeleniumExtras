@@ -35,7 +35,7 @@ namespace SeleniumExtras.MemberBuilders
 
             if (memberType == typeof(IWebElement))
             {
-                createdObject = WebElementProxy.CreateProxy(locator, bys, cache);
+                createdObject = new WebElementProxy(locator, bys, cache);
                 return true;
             }
 

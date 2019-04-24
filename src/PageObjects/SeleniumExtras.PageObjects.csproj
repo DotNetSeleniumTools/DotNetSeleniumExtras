@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <PackageReference Include="Selenium.WebDriver" Version="4.0.0-alpha01" />
-    <PackageReference Include="System.Reflection.DispatchProxy" Version="4.5.1" />
   </ItemGroup>
 
 </Project>

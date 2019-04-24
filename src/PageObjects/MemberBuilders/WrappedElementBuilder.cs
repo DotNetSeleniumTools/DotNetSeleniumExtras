@@ -14,7 +14,7 @@ namespace SeleniumExtras.MemberBuilders
 
             if (typeof(IWrapsElement).IsAssignableFrom(memberType))
             {
-                var webElement = WebElementProxy.CreateProxy(locator, bys, cache);
+                var webElement = new WebElementProxy(locator, bys, cache);
                 createdObject = WrapsElementFactory.Wrap(memberType, webElement);
                 return true;
             }

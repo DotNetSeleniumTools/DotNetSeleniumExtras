@@ -25,27 +25,22 @@ namespace SeleniumExtras.PageObjects
     /// <summary>
     /// Represents a proxy class for a list of elements to be used with the PageFactory.
     /// </summary>
-    internal class WebElementListProxy : IList<IWebElement>
+    internal class WebElementListProxy : WebDriverObjectProxy, IList<IWebElement>
     {
-        public WebElementListProxy(IElementLocator elementLocator, IEnumerable<By> bys, bool cache)
+        private IList<IWebElement> _items;
+
+        public WebElementListProxy(IElementLocator locator, IEnumerable<By> bys, bool cache)
+            : base(locator, bys, cache)
         {
-            _elementLocator = elementLocator;
-            _bys = bys;
-            _cache = cache;
         }
 
-        private readonly IElementLocator _elementLocator;
-        private readonly IEnumerable<By> _bys;
-        private readonly bool _cache;
-
-        private IList<IWebElement> _items;
         private IList<IWebElement> Items
         {
             get
             {
-                if (_items == null || !_cache)
+                if (_items == null || !Cache)
                 {
-                    _items = _elementLocator.LocateElements(_bys);
+                    _items = Locator.LocateElements(Bys);
                 }
                 return _items;
             }
