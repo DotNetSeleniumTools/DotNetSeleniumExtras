@@ -14,10 +14,18 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/Dreamescaper/DotNetSeleniumExtras/</PackageProjectUrl>
     <PackageReleaseNotes>https://raw.githubusercontent.com/Dreamescaper/DotNetSeleniumExtras/master/CHANGELOG</PackageReleaseNotes>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Selenium.WebDriver" Version="4.0.0-alpha01" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
