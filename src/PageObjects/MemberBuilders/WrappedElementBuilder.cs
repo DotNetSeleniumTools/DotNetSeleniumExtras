@@ -6,7 +6,7 @@ using SeleniumExtras.PageObjects.Tests;
 
 namespace SeleniumExtras.MemberBuilders
 {
-    public class WrappedElementBuilder : IMemberBuilder
+    internal class WrappedElementBuilder : IMemberBuilder
     {
         public bool CreateObject(Type memberType, IElementLocator locator, IEnumerable<By> bys, bool cache, out object createdObject)
         {

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28822.285
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.PageObjects", "src\PageObjects\SeleniumExtras.PageObjects.csproj", "{3288DCD2-37C6-49D1-834D-BBC0789724E4}"
 EndProject
@@ -14,6 +14,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.PageObjects.Linq", "src\PageObjects.Linq\SeleniumExtras.PageObjects.Linq.csproj", "{F224B438-F355-4FC6-AECA-F93A5EEFE329}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeleniumExtras.PageObjects.Linq.Tests", "test\PageObjects.Linq\SeleniumExtras.PageObjects.Linq.Tests.csproj", "{959C948F-FDED-4833-9024-12288848E9F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{255218F4-5216-4F66-AECF-75960A77A32F}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG = CHANGELOG
+		LICENSE = LICENSE
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

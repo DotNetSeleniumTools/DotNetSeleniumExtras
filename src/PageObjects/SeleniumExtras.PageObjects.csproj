@@ -13,6 +13,7 @@
     <Copyright>Copyright 2018, Software Freedom Conservancy</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/Dreamescaper/DotNetSeleniumExtras/</PackageProjectUrl>
+    <PackageReleaseNotes>https://raw.githubusercontent.com/Dreamescaper/DotNetSeleniumExtras/master/CHANGELOG</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
