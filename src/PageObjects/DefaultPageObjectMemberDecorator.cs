@@ -80,14 +80,9 @@ namespace SeleniumExtras.PageObjects
             return null;
         }
 
-        internal virtual IEnumerable<IMemberBuilder> GetMemberBuilders()
+        public virtual object CreateObject(Type memberType, IElementLocator locator, IEnumerable<By> bys, bool cache)
         {
-            return _memberBuilders;
-        }
-
-        private object CreateObject(Type memberType, IElementLocator locator, IEnumerable<By> bys, bool cache)
-        {
-            foreach (var builder in GetMemberBuilders())
+            foreach (var builder in _memberBuilders)
             {
                 if (builder.CreateObject(memberType, locator, bys, cache, out object createdObject))
                 {
@@ -112,7 +107,9 @@ namespace SeleniumExtras.PageObjects
             }
 
             var cacheAttributeType = typeof(CacheLookupAttribute);
-            bool cache = member.GetCustomAttributes(cacheAttributeType, true).Length != 0 || member.DeclaringType.GetCustomAttributes(cacheAttributeType, true).Length != 0;
+            bool cache = member.GetCustomAttributes(cacheAttributeType, true).Length != 0
+                || member.DeclaringType.GetCustomAttributes(cacheAttributeType, true).Length != 0;
+
             return cache;
         }
 
