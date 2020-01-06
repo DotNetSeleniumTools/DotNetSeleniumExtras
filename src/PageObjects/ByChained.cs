@@ -76,7 +76,7 @@ namespace SeleniumExtras.PageObjects
                 return new List<IWebElement>().AsReadOnly();
             }
 
-            List<IWebElement> elems = null;
+            List<IWebElement>? elems = null;
             foreach (By by in this.bys)
             {
                 List<IWebElement> newElems = new List<IWebElement>();
@@ -96,7 +96,7 @@ namespace SeleniumExtras.PageObjects
                 elems = newElems;
             }
 
-            return elems.AsReadOnly();
+            return elems!.AsReadOnly();
         }
 
         /// <summary>

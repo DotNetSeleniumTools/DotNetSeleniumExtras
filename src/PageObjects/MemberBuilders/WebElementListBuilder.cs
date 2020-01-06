@@ -11,7 +11,7 @@ namespace SeleniumExtras.MemberBuilders
     /// </summary>
     internal class WebElementListBuilder : IMemberBuilder
     {
-        public bool CreateObject(Type memberType, IElementLocator locator, IEnumerable<By> bys, bool cache, out object createdObject)
+        public bool CreateObject(Type memberType, IElementLocator locator, IEnumerable<By> bys, bool cache, out object? createdObject)
         {
             createdObject = null;
 

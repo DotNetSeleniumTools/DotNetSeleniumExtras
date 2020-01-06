@@ -81,7 +81,7 @@ namespace SeleniumExtras.PageObjects
         public static T InitElements<T>(IElementLocator locator)
         {
             Type pageClassType = typeof(T);
-            ConstructorInfo ctor = pageClassType.GetConstructor(new Type[] { typeof(IWebDriver) });
+            ConstructorInfo? ctor = pageClassType.GetConstructor(new Type[] { typeof(IWebDriver) });
             if (ctor == null)
             {
                 throw new ArgumentException("No constructor for the specified class containing a single argument of type IWebDriver can be found");
@@ -92,13 +92,13 @@ namespace SeleniumExtras.PageObjects
                 throw new ArgumentNullException(nameof(locator), "locator cannot be null");
             }
 
-            IWebDriver driver = locator.SearchContext as IWebDriver;
+            IWebDriver? driver = locator.SearchContext as IWebDriver;
             if (driver == null)
             {
                 throw new ArgumentException("The search context of the element locator must implement IWebDriver", nameof(locator));
             }
 
-            var page = (T)ctor.Invoke(new object[] { locator.SearchContext as IWebDriver });
+            var page = (T)ctor.Invoke(new object[] { driver });
             InitElements(page, locator);
             return page;
         }
@@ -187,7 +187,7 @@ namespace SeleniumExtras.PageObjects
 
             // Get a list of all of the fields and properties (public and non-public [private, protected, etc.])
             // in the passed-in page object. Note that we walk the inheritance tree to get superclass members.
-            var type = page.GetType();
+            Type? type = page.GetType();
             var members = new List<MemberInfo>();
             members.AddRange(type.GetFields(PublicBindingOptions));
             members.AddRange(type.GetProperties(PublicBindingOptions));
@@ -202,7 +202,7 @@ namespace SeleniumExtras.PageObjects
             {
                 // Examine each member, and if the decorator returns a non-null object,
                 // set the value of that member to the decorated object.
-                object decoratedValue = decorator.Decorate(member, locator);
+                object? decoratedValue = decorator.Decorate(member, locator);
                 if (decoratedValue == null)
                 {
                     continue;

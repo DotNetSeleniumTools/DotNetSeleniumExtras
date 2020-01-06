@@ -34,6 +34,6 @@ namespace SeleniumExtras.PageObjects
         /// a class's member.</param>
         /// <param name="locator">The <see cref="IElementLocator"/> used to locate elements.</param>
         /// <returns>A transparent proxy to the WebDriver element object.</returns>
-        object Decorate(MemberInfo member, IElementLocator locator);
+        object? Decorate(MemberInfo member, IElementLocator locator);
     }
 }

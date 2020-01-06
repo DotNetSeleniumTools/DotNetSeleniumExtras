@@ -66,13 +66,14 @@ namespace SeleniumExtras.PageObjects
                         throw new ArgumentException("Custom finder type must be a descendent of the By class");
                     }
 
-                    ConstructorInfo ctor = attribute.CustomFinderType.GetConstructor(new Type[] { typeof(string) });
+                    ConstructorInfo? ctor = attribute.CustomFinderType.GetConstructor(new Type[] { typeof(string) });
                     if (ctor == null)
                     {
                         throw new ArgumentException("Custom finder type must expose a public constructor with a string argument");
                     }
 
-                    By finder = ctor.Invoke(new object[] { usingValue }) as By;
+                    By finder = (By)ctor.Invoke(new object?[] { usingValue });
+
                     return finder;
             }
 

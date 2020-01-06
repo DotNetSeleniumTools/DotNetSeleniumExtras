@@ -29,7 +29,6 @@ namespace SeleniumExtras.PageObjects
     /// </summary>
     public class DefaultElementLocator : IElementLocator
     {
-        private ISearchContext searchContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultElementLocator"/> class.
@@ -38,16 +37,13 @@ namespace SeleniumExtras.PageObjects
         /// to locate elements.</param>
         public DefaultElementLocator(ISearchContext searchContext)
         {
-            this.searchContext = searchContext;
+            this.SearchContext = searchContext;
         }
 
         /// <summary>
         /// Gets the <see cref="ISearchContext"/> to be used in locating elements.
         /// </summary>
-        public ISearchContext SearchContext
-        {
-            get { return this.searchContext; }
-        }
+        public ISearchContext SearchContext { get; }
 
         /// <summary>
         /// Locates an element using the given list of <see cref="By"/> criteria.
@@ -61,12 +57,12 @@ namespace SeleniumExtras.PageObjects
                 throw new ArgumentNullException(nameof(bys), "List of criteria may not be null");
             }
 
-            string errorString = null;
+            string? errorString = null;
             foreach (var by in bys)
             {
                 try
                 {
-                    return this.searchContext.FindElement(by);
+                    return this.SearchContext.FindElement(by);
                 }
                 catch (NoSuchElementException)
                 {
@@ -92,7 +88,7 @@ namespace SeleniumExtras.PageObjects
             List<IWebElement> collection = new List<IWebElement>();
             foreach (var by in bys)
             {
-                ReadOnlyCollection<IWebElement> list = this.searchContext.FindElements(by);
+                ReadOnlyCollection<IWebElement> list = this.SearchContext.FindElements(by);
                 collection.AddRange(list);
             }
 

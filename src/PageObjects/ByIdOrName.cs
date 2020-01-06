@@ -29,9 +29,9 @@ namespace SeleniumExtras.PageObjects
     /// </summary>
     public class ByIdOrName : By
     {
-        private string elementIdentifier = string.Empty;
-        private By idFinder;
-        private By nameFinder;
+        private readonly string elementIdentifier = string.Empty;
+        private readonly By idFinder;
+        private readonly By nameFinder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ByIdOrName"/> class.

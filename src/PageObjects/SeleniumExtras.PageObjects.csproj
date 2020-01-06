@@ -6,6 +6,8 @@
     <RootNamespace>SeleniumExtras</RootNamespace>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <FileVersion>4.0.0.0</FileVersion>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
     <Version>4.0.0-alpha01</Version>
     <PackageId>DotNetSeleniumExtras.PageObjects.Core</PackageId>
     <Authors>Dreamescaper</Authors>
@@ -19,6 +21,11 @@
 
   <ItemGroup>
     <PackageReference Include="Selenium.WebDriver" Version="4.0.0-alpha01" />
+    <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.154">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[3.1.0]" />
   </ItemGroup>
 
   <ItemGroup>

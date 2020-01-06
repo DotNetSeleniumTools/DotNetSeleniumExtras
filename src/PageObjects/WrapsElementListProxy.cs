@@ -28,7 +28,7 @@ namespace SeleniumExtras.PageObjects
     /// </summary>
     internal class WrapsElementListProxy<T> : WebDriverObjectProxy, IList<T> where T : IWrapsElement
     {
-        private IList<T> _items;
+        private IList<T>? _items;
 
         public WrapsElementListProxy(IElementLocator locator, IEnumerable<By> bys, bool cache)
             : base(locator, bys, cache)

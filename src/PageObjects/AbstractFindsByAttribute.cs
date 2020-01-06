@@ -47,7 +47,7 @@ namespace SeleniumExtras.PageObjects
         /// <param name="one">One instance to compare.</param>
         /// <param name="two">The other instance to compare.</param>
         /// <returns><see langword="true"/> if the two instances are equal; otherwise, <see langword="false"/>.</returns>
-        public static bool operator ==(AbstractFindsByAttribute one, AbstractFindsByAttribute two)
+        public static bool operator ==(AbstractFindsByAttribute? one, AbstractFindsByAttribute? two)
         {
             // If both are null, or both are same instance, return true.
             if (object.ReferenceEquals(one, two))
@@ -56,7 +56,7 @@ namespace SeleniumExtras.PageObjects
             }
 
             // If one is null, but not both, return false.
-            if (((object)one == null) || ((object)two == null))
+            if (one is null || two is null)
             {
                 return false;
             }
@@ -70,7 +70,7 @@ namespace SeleniumExtras.PageObjects
         /// <param name="one">One instance to compare.</param>
         /// <param name="two">The other instance to compare.</param>
         /// <returns><see langword="true"/> if the two instances are not equal; otherwise, <see langword="false"/>.</returns>
-        public static bool operator !=(AbstractFindsByAttribute one, AbstractFindsByAttribute two)
+        public static bool operator !=(AbstractFindsByAttribute? one, AbstractFindsByAttribute? two)
         {
             return !(one == two);
         }
@@ -83,7 +83,7 @@ namespace SeleniumExtras.PageObjects
         /// <returns><see langword="true"/> if the first instance is greater than the second; otherwise, <see langword="false"/>.</returns>
         public static bool operator >(AbstractFindsByAttribute one, AbstractFindsByAttribute two)
         {
-            if (one == null)
+            if (one is null)
             {
                 throw new ArgumentNullException("one", "Object to compare cannot be null");
             }
@@ -99,7 +99,7 @@ namespace SeleniumExtras.PageObjects
         /// <returns><see langword="true"/> if the first instance is less than the second; otherwise, <see langword="false"/>.</returns>
         public static bool operator <(AbstractFindsByAttribute one, AbstractFindsByAttribute two)
         {
-            if (one == null)
+            if (one is null)
             {
                 throw new ArgumentNullException("one", "Object to compare cannot be null");
             }
@@ -121,14 +121,14 @@ namespace SeleniumExtras.PageObjects
         /// <item><description>Greater than zero</description><description>This instance follows <paramref name="obj"/> in the sort order. </description></item>
         /// </list>
         /// </returns>
-        public int CompareTo(object obj)
+        public int CompareTo(object? obj)
         {
             if (obj == null)
             {
                 throw new ArgumentNullException(nameof(obj), "Object to compare cannot be null");
             }
 
-            AbstractFindsByAttribute other = obj as AbstractFindsByAttribute;
+            AbstractFindsByAttribute? other = obj as AbstractFindsByAttribute;
             if (other == null)
             {
                 throw new ArgumentException("Object to compare must be a AbstractFindsByAttribute", nameof(obj));
@@ -152,14 +152,14 @@ namespace SeleniumExtras.PageObjects
         /// <returns><see langword="true"/> if the specified <see cref="object">Object</see>
         /// is equal to the current <see cref="object">Object</see>; otherwise,
         /// <see langword="false"/>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj == null)
             {
                 return false;
             }
 
-            AbstractFindsByAttribute other = obj as AbstractFindsByAttribute;
+            AbstractFindsByAttribute? other = obj as AbstractFindsByAttribute;
             if (other == null)
             {
                 return false;

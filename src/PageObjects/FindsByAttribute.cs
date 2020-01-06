@@ -60,7 +60,7 @@ namespace SeleniumExtras.PageObjects
     /// </remarks>
     public sealed class FindsByAttribute : AbstractFindsByAttribute
     {
-        private By finder;
+        private By? finder;
 
         public FindsByAttribute() { }
 
@@ -84,14 +84,14 @@ namespace SeleniumExtras.PageObjects
         /// <summary>
         /// Gets or sets the value to lookup by (i.e. for How.Name, the actual name to look up)
         /// </summary>
-        public string Using { get; set; }
+        public string? Using { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating the <see cref="Type"/> of the custom finder. The custom finder must
         /// descend from the <see cref="By"/> class, and expose a public constructor that takes a <see cref="string"/>
         /// argument.
         /// </summary>
-        public Type CustomFinderType { get; set; }
+        public Type? CustomFinderType { get; set; }
 
         /// <summary>
         /// Gets an explicit <see cref="By"/> object to find by.

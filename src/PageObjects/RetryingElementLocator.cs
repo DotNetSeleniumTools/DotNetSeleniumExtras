@@ -32,8 +32,6 @@ namespace SeleniumExtras.PageObjects
     {
         private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(5);
         private static readonly TimeSpan DefaultPollingInterval = TimeSpan.FromMilliseconds(500);
-
-        private ISearchContext searchContext;
         private TimeSpan timeout;
         private TimeSpan pollingInterval;
 
@@ -70,7 +68,7 @@ namespace SeleniumExtras.PageObjects
         /// for the existence of the element.</param>
         public RetryingElementLocator(ISearchContext searchContext, TimeSpan timeout, TimeSpan pollingInterval)
         {
-            this.searchContext = searchContext;
+            this.SearchContext = searchContext;
             this.timeout = timeout;
             this.pollingInterval = pollingInterval;
         }
@@ -78,10 +76,7 @@ namespace SeleniumExtras.PageObjects
         /// <summary>
         /// Gets the <see cref="ISearchContext"/> to be used in locating elements.
         /// </summary>
-        public ISearchContext SearchContext
-        {
-            get { return this.searchContext; }
-        }
+        public ISearchContext SearchContext { get; }
 
         /// <summary>
         /// Locates an element using the given list of <see cref="By"/> criteria.
@@ -95,7 +90,7 @@ namespace SeleniumExtras.PageObjects
                 throw new ArgumentNullException(nameof(bys), "List of criteria may not be null");
             }
 
-            string errorString = null;
+            string? errorString = null;
             DateTime endTime = DateTime.Now.Add(this.timeout);
             bool timeoutReached = DateTime.Now > endTime;
             while (!timeoutReached)

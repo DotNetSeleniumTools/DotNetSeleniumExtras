@@ -29,7 +29,7 @@ namespace SeleniumExtras.PageObjects
     /// </summary>
     internal class WebElementProxy : WebDriverObjectProxy, IWrapsElement, IWebElement, ILocatable
     {
-        private IWebElement cachedElement;
+        private IWebElement? cachedElement;
 
         public WebElementProxy(IElementLocator locator, IEnumerable<By> bys, bool cache)
             : base(locator, bys, cache)
@@ -94,7 +94,7 @@ namespace SeleniumExtras.PageObjects
 
         public override int GetHashCode() => WrappedElement.GetHashCode();
 
-        public override bool Equals(object obj) => WrappedElement.Equals(obj);
+        public override bool Equals(object? obj) => WrappedElement.Equals(obj);
 
         #endregion Forwarded WrappedElement calls
     }

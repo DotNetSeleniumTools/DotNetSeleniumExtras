@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using OpenQA.Selenium;
 
 namespace SeleniumExtras.PageObjects.Tests
@@ -30,6 +31,7 @@ namespace SeleniumExtras.PageObjects.Tests
         /// <summary>
         /// Create page object member
         /// </summary>
-        bool CreateObject(Type memberType, IElementLocator locator, IEnumerable<By> bys, bool cache, out object createdObject);
+        bool CreateObject(Type memberType, IElementLocator locator, IEnumerable<By> bys, bool cache,
+            [NotNullWhen(true)] out object? createdObject);
     }
 }

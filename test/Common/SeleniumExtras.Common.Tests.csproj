@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="Selenium.WebDriver" Version="4.0.0-alpha01" />
     <PackageReference Include="EmbedIO" Version="2.6.0" />
   </ItemGroup>

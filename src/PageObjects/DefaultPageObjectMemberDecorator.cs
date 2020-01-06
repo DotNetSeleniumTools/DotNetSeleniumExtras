@@ -47,25 +47,23 @@ namespace SeleniumExtras.PageObjects
         /// a class's member.</param>
         /// <param name="locator">The <see cref="IElementLocator"/> used to locate elements.</param>
         /// <returns>A transparent proxy to the WebDriver element object.</returns>
-        public virtual object Decorate(MemberInfo member, IElementLocator locator)
+        public virtual object? Decorate(MemberInfo member, IElementLocator locator)
         {
-            FieldInfo field = member as FieldInfo;
-            PropertyInfo property = member as PropertyInfo;
+            FieldInfo? field = member as FieldInfo;
+            PropertyInfo? property = member as PropertyInfo;
 
-            Type targetType = null;
+            Type? targetType = null;
             if (field != null)
             {
                 targetType = field.FieldType;
             }
 
-            bool hasPropertySet = false;
-            if (property != null)
+            if (property != null && property.CanWrite)
             {
-                hasPropertySet = property.CanWrite;
                 targetType = property.PropertyType;
             }
 
-            if (field == null && (property == null || !hasPropertySet))
+            if (targetType == null)
             {
                 return null;
             }
@@ -84,7 +82,7 @@ namespace SeleniumExtras.PageObjects
         {
             foreach (var builder in _memberBuilders)
             {
-                if (builder.CreateObject(memberType, locator, bys, cache, out object createdObject))
+                if (builder.CreateObject(memberType, locator, bys, cache, out object? createdObject))
                 {
                     return createdObject;
                 }
@@ -107,8 +105,8 @@ namespace SeleniumExtras.PageObjects
             }
 
             var cacheAttributeType = typeof(CacheLookupAttribute);
-            bool cache = member.GetCustomAttributes(cacheAttributeType, true).Length != 0
-                || member.DeclaringType.GetCustomAttributes(cacheAttributeType, true).Length != 0;
+            bool cache = member.GetCustomAttributes(cacheAttributeType, true).Length > 0
+                || member.DeclaringType?.GetCustomAttributes(cacheAttributeType, true).Length > 0;
 
             return cache;
         }

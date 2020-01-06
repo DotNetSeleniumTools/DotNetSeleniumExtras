@@ -27,7 +27,7 @@ namespace SeleniumExtras.PageObjects
     /// </summary>
     internal class WebElementListProxy : WebDriverObjectProxy, IList<IWebElement>
     {
-        private IList<IWebElement> _items;
+        private IList<IWebElement>? _items;
 
         public WebElementListProxy(IElementLocator locator, IEnumerable<By> bys, bool cache)
             : base(locator, bys, cache)

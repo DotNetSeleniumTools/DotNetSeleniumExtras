@@ -77,7 +77,7 @@ namespace SeleniumExtras.PageObjects
                 return new List<IWebElement>().AsReadOnly();
             }
 
-            IEnumerable<IWebElement> elements = null;
+            IEnumerable<IWebElement>? elements = null;
             foreach (By by in this.bys)
             {
                 ReadOnlyCollection<IWebElement> foundElements = by.FindElements(context);
