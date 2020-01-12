@@ -1,19 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net40;net35;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <AssemblyName>SeleniumExtras.WaitHelpers</AssemblyName>
     <RootNamespace>SeleniumExtras</RootNamespace>
     <PackageId>DotNetSeleniumExtras.WaitHelpers</PackageId>
-    <AssemblyVersion>3.11.0.0</AssemblyVersion>
-    <FileVersion>3.11.0.0</FileVersion>
-    <Version>3.11.0</Version>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <FileVersion>4.0.0.0</FileVersion>
+    <Version>4.0.0-alpha04</Version>
     <Description>This package provides an implementation of the ExpectedConditions class for use with WebDriverWait in .NET, replacing the implementation originally provided by the Selenium project.</Description>
     <Copyright>Copyright 2018, Software Freedom Conservancy</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Selenium.WebDriver" Version="3.10.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.0.0-alpha04" />
   </ItemGroup>
 
 </Project>
