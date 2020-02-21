@@ -119,16 +119,16 @@ namespace SeleniumExtras.WaitHelpers
         public static Func<ISearchContext, IWebElement> ElementIsVisible(By locator)
         {
             return (searchContext) =>
+            {
+                try
                 {
-                    try
-                    {
-                        return ElementIfVisible(searchContext.FindElement(locator));
-                    }
-                    catch (StaleElementReferenceException)
-                    {
-                        return null;
-                    }
-                };
+                    return ElementIfVisible(searchContext.FindElement(locator));
+                }
+                catch (StaleElementReferenceException)
+                {
+                    return null;
+                }
+            };
         }
 
         /// <summary>
