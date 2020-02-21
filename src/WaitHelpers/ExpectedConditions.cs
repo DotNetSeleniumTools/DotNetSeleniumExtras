@@ -104,9 +104,9 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="locator">The locator used to find the element.</param>
         /// <returns>The <see cref="IWebElement"/> once it is located.</returns>
-        public static Func<IWebDriver, IWebElement> ElementExists(By locator)
+        public static Func<ISearchContext, IWebElement> ElementExists(By locator)
         {
-            return (driver) => { return driver.FindElement(locator); };
+            return (searchContext) => searchContext.FindElement(locator);
         }
 
         /// <summary>
@@ -116,13 +116,13 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="locator">The locator used to find the element.</param>
         /// <returns>The <see cref="IWebElement"/> once it is located and visible.</returns>
-        public static Func<IWebDriver, IWebElement> ElementIsVisible(By locator)
+        public static Func<ISearchContext, IWebElement> ElementIsVisible(By locator)
         {
-            return (driver) =>
+            return (searchContext) =>
                 {
                     try
                     {
-                        return ElementIfVisible(driver.FindElement(locator));
+                        return ElementIfVisible(searchContext.FindElement(locator));
                     }
                     catch (StaleElementReferenceException)
                     {
@@ -138,13 +138,13 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="locator">The locator used to find the element.</param>
         /// <returns>The list of <see cref="IWebElement"/> once it is located and visible.</returns>
-        public static Func<IWebDriver, ReadOnlyCollection<IWebElement>> VisibilityOfAllElementsLocatedBy(By locator)
+        public static Func<ISearchContext, ReadOnlyCollection<IWebElement>> VisibilityOfAllElementsLocatedBy(By locator)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
-                    var elements = driver.FindElements(locator);
+                    var elements = searchContext.FindElements(locator);
                     if (elements.Any(element => !element.Displayed))
                     {
                         return null;
@@ -166,9 +166,9 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="elements">list of WebElements</param>
         /// <returns>The list of <see cref="IWebElement"/> once it is located and visible.</returns>
-        public static Func<IWebDriver, ReadOnlyCollection<IWebElement>> VisibilityOfAllElementsLocatedBy(ReadOnlyCollection<IWebElement> elements)
+        public static Func<ISearchContext, ReadOnlyCollection<IWebElement>> VisibilityOfAllElementsLocatedBy(ReadOnlyCollection<IWebElement> elements)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
@@ -192,13 +192,13 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="locator">The locator used to find the element.</param>
         /// <returns>The list of <see cref="IWebElement"/> once it is located.</returns>
-        public static Func<IWebDriver, ReadOnlyCollection<IWebElement>> PresenceOfAllElementsLocatedBy(By locator)
+        public static Func<ISearchContext, ReadOnlyCollection<IWebElement>> PresenceOfAllElementsLocatedBy(By locator)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
-                    var elements = driver.FindElements(locator);
+                    var elements = searchContext.FindElements(locator);
                     return elements.Any() ? elements : null;
                 }
                 catch (StaleElementReferenceException)
@@ -214,9 +214,9 @@ namespace SeleniumExtras.WaitHelpers
         /// <param name="element">The WebElement</param>
         /// <param name="text">Text to be present in the element</param>
         /// <returns><see langword="true"/> once the element contains the given text; otherwise, <see langword="false"/>.</returns>
-        public static Func<IWebDriver, bool> TextToBePresentInElement(IWebElement element, string text)
+        public static Func<ISearchContext, bool> TextToBePresentInElement(IWebElement element, string text)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
@@ -236,13 +236,13 @@ namespace SeleniumExtras.WaitHelpers
         /// <param name="locator">The locator used to find the element.</param>
         /// <param name="text">Text to be present in the element</param>
         /// <returns><see langword="true"/> once the element contains the given text; otherwise, <see langword="false"/>.</returns>
-        public static Func<IWebDriver, bool> TextToBePresentInElementLocated(By locator, string text)
+        public static Func<ISearchContext, bool> TextToBePresentInElementLocated(By locator, string text)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
-                    var element = driver.FindElement(locator);
+                    var element = searchContext.FindElement(locator);
                     var elementText = element.Text;
                     return elementText.Contains(text);
                 }
@@ -259,9 +259,9 @@ namespace SeleniumExtras.WaitHelpers
         /// <param name="element">The WebElement</param>
         /// <param name="text">Text to be present in the element</param>
         /// <returns><see langword="true"/> once the element contains the given text; otherwise, <see langword="false"/>.</returns>
-        public static Func<IWebDriver, bool> TextToBePresentInElementValue(IWebElement element, string text)
+        public static Func<ISearchContext, bool> TextToBePresentInElementValue(IWebElement element, string text)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
@@ -288,13 +288,13 @@ namespace SeleniumExtras.WaitHelpers
         /// <param name="locator">The locator used to find the element.</param>
         /// <param name="text">Text to be present in the element</param>
         /// <returns><see langword="true"/> once the element contains the given text; otherwise, <see langword="false"/>.</returns>
-        public static Func<IWebDriver, bool> TextToBePresentInElementValue(By locator, string text)
+        public static Func<ISearchContext, bool> TextToBePresentInElementValue(By locator, string text)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
-                    var element = driver.FindElement(locator);
+                    var element = searchContext.FindElement(locator);
                     var elementValue = element.GetAttribute("value");
                     if (elementValue != null)
                     {
@@ -362,13 +362,13 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="locator">The locator used to find the element.</param>
         /// <returns><see langword="true"/> if the element is not displayed; otherwise, <see langword="false"/>.</returns>
-        public static Func<IWebDriver, bool> InvisibilityOfElementLocated(By locator)
+        public static Func<ISearchContext, bool> InvisibilityOfElementLocated(By locator)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
-                    var element = driver.FindElement(locator);
+                    var element = searchContext.FindElement(locator);
                     return !element.Displayed;
                 }
                 catch (NoSuchElementException)
@@ -392,13 +392,13 @@ namespace SeleniumExtras.WaitHelpers
         /// <param name="locator">The locator used to find the element.</param>
         /// <param name="text">Text of the element</param>
         /// <returns><see langword="true"/> if the element is not displayed; otherwise, <see langword="false"/>.</returns>
-        public static Func<IWebDriver, bool> InvisibilityOfElementWithText(By locator, string text)
+        public static Func<ISearchContext, bool> InvisibilityOfElementWithText(By locator, string text)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
-                    var element = driver.FindElement(locator);
+                    var element = searchContext.FindElement(locator);
                     var elementText = element.Text;
                     if (string.IsNullOrEmpty(elementText))
                     {
@@ -428,11 +428,11 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="locator">The locator used to find the element.</param>
         /// <returns>The <see cref="IWebElement"/> once it is located and clickable (visible and enabled).</returns>
-        public static Func<IWebDriver, IWebElement> ElementToBeClickable(By locator)
+        public static Func<ISearchContext, IWebElement> ElementToBeClickable(By locator)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
-                var element = ElementIfVisible(driver.FindElement(locator));
+                var element = ElementIfVisible(searchContext.FindElement(locator));
                 try
                 {
                     if (element != null && element.Enabled)
@@ -457,9 +457,9 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns>The <see cref="IWebElement"/> once it is clickable (visible and enabled).</returns>
-        public static Func<IWebDriver, IWebElement> ElementToBeClickable(IWebElement element)
+        public static Func<ISearchContext, IWebElement> ElementToBeClickable(IWebElement element)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
@@ -484,9 +484,9 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns><see langword="false"/> is the element is still attached to the DOM; otherwise, <see langword="true"/>.</returns>
-        public static Func<IWebDriver, bool> StalenessOf(IWebElement element)
+        public static Func<ISearchContext, bool> StalenessOf(IWebElement element)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
@@ -505,7 +505,7 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns><see langword="true"/> given element is selected.; otherwise, <see langword="false"/>.</returns>
-        public static Func<IWebDriver, bool> ElementToBeSelected(IWebElement element)
+        public static Func<IWebElement, bool> ElementToBeSelected(IWebElement element)
         {
             return ElementSelectionStateToBe(element, true);
         }
@@ -516,9 +516,9 @@ namespace SeleniumExtras.WaitHelpers
         /// <param name="element">The element.</param>
         /// <param name="selected">selected or not selected</param>
         /// <returns><see langword="true"/> given element is in correct state.; otherwise, <see langword="false"/>.</returns>
-        public static Func<IWebDriver, bool> ElementToBeSelected(IWebElement element, bool selected)
+        public static Func<ISearchContext, bool> ElementToBeSelected(IWebElement element, bool selected)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 return element.Selected == selected;
             };
@@ -530,9 +530,9 @@ namespace SeleniumExtras.WaitHelpers
         /// <param name="element">The element.</param>
         /// <param name="selected">selected or not selected</param>
         /// <returns><see langword="true"/> given element is in correct state.; otherwise, <see langword="false"/>.</returns>
-        public static Func<IWebDriver, bool> ElementSelectionStateToBe(IWebElement element, bool selected)
+        public static Func<IWebElement, bool> ElementSelectionStateToBe(IWebElement element, bool selected)
         {
-            return (driver) =>
+            return (webElement) =>
             {
                 return element.Selected == selected;
             };
@@ -543,7 +543,7 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="locator">The locator used to find the element.</param>
         /// <returns><see langword="true"/> given element is selected.; otherwise, <see langword="false"/>.</returns>
-        public static Func<IWebDriver, bool> ElementToBeSelected(By locator)
+        public static Func<ISearchContext, bool> ElementToBeSelected(By locator)
         {
             return ElementSelectionStateToBe(locator, true);
         }
@@ -554,13 +554,13 @@ namespace SeleniumExtras.WaitHelpers
         /// <param name="locator">The locator used to find the element.</param>
         /// <param name="selected">selected or not selected</param>
         /// <returns><see langword="true"/> given element is in correct state.; otherwise, <see langword="false"/>.</returns>
-        public static Func<IWebDriver, bool> ElementSelectionStateToBe(By locator, bool selected)
+        public static Func<ISearchContext, bool> ElementSelectionStateToBe(By locator, bool selected)
         {
-            return (driver) =>
+            return (searchContext) =>
             {
                 try
                 {
-                    var element = driver.FindElement(locator);
+                    var element = searchContext.FindElement(locator);
                     return element.Selected == selected;
                 }
                 catch (StaleElementReferenceException)
