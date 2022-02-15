@@ -138,6 +138,28 @@ namespace SeleniumExtras.WaitHelpers
         /// </summary>
         /// <param name="locator">The locator used to find the element.</param>
         /// <returns>The list of <see cref="IWebElement"/> once it is located and visible.</returns>
+        
+           public static Func<IWebDriver, IWebElement> ElementIsVisible(IWebElement element)
+        {
+            return (driver) =>
+                {
+                    try
+                    {
+                        return ElementIfVisible(element);
+                    }
+                    catch (StaleElementReferenceException)
+                    {
+                        return null;
+                    }
+                };
+        }
+
+        /// <summary>
+        /// An expectation for checking that all elements present on the web page that
+        /// match the element are visible. Visibility means that the elements are not
+        /// only displayed but also have a height and width that is greater than 0.
+        /// </summary>
+        /// <returns>The list of <see cref="IWebElement"/> once the element is visible.</returns>
         public static Func<IWebDriver, ReadOnlyCollection<IWebElement>> VisibilityOfAllElementsLocatedBy(By locator)
         {
             return (driver) =>
