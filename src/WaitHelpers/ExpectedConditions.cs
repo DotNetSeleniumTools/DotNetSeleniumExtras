@@ -432,9 +432,9 @@ namespace SeleniumExtras.WaitHelpers
         {
             return (driver) =>
             {
-                var element = ElementIfVisible(driver.FindElement(locator));
                 try
                 {
+                    var element = ElementIfVisible(driver.FindElement(locator));
                     if (element != null && element.Enabled)
                     {
                         return element;
